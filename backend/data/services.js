@@ -1,7 +1,7 @@
 
 const services = [
     {
-        _id: '1',
+        _id: '5c8a1dfa2f8fb814b56fa100',
         name: 'Breakfast',
         image: '/services/breakfast.jpg',
         regularPrice: 15,
@@ -11,7 +11,7 @@ const services = [
 
     },
     {
-        _id: '2',
+        _id: '5c8a1dfa2f8fb814b56fa200',
         name: 'Spa',
         image: '/services/spa.jpg',
         regularPrice: 30,
@@ -21,7 +21,7 @@ const services = [
 
     },
     {
-        _id: '3',
+        _id: '5c8a1dfa2f8fb814b56fa300',
         name: 'Fishing',
         image: '/services/fishing.jpg',
         regularPrice: 20,
@@ -31,7 +31,7 @@ const services = [
 
     },
     {
-        _id: '4',
+        _id: '5c8a1dfa2f8fb814b56fa400',
         name: 'Mountain climbing',
         image: '/services/mountain_climbing.jpg',
         regularPrice: 80,

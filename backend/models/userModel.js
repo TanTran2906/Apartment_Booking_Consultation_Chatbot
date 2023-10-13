@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema(
             required: [true, 'Please provide your email'],
             unique: true,
             lowercase: true, //tự chuyển đổi tất cả thành chữ thường
-            validate: [validator.isEmail, 'Please provide a valid email'] //validator.isEmail: kiểm tra xem một chuỗi có đúng định dạng email hay không
+            // validate: [validator.isEmail, 'Please provide a valid email'] //validator.isEmail: kiểm tra xem một chuỗi có đúng định dạng email hay không
         },
         photo: {
             type: String,

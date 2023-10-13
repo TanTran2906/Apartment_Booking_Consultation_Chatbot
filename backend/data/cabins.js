@@ -1,7 +1,7 @@
 
 const cabins = [
     {
-        _id: '104',
+        _id: '5c8a1dfa2f8fb814b56fa104',
         name: '001',
         maxCapacity: 2,
         regularPrice: 250,
@@ -14,7 +14,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '105',
+        _id: '5c8a1dfa2f8fb814b56fa105',
         name: '002',
         maxCapacity: 2,
         regularPrice: 350,
@@ -27,7 +27,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '106',
+        _id: '5c8a1dfa2f8fb814b56fa106',
         name: "003",
         maxCapacity: 4,
         regularPrice: 300,
@@ -40,7 +40,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '107',
+        _id: '5c8a1dfa2f8fb814b56fa107',
         name: "004",
         maxCapacity: 4,
         regularPrice: 500,
@@ -53,7 +53,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '108',
+        _id: '5c8a1dfa2f8fb814b56fa108',
         name: "005",
         maxCapacity: 6,
         regularPrice: 350,
@@ -66,7 +66,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '109',
+        _id: '5c8a1dfa2f8fb814b56fa109',
         name: "006",
         maxCapacity: 6,
         regularPrice: 800,
@@ -79,7 +79,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '110',
+        _id: '5c8a1dfa2f8fb814b56fa110',
         name: "007",
         maxCapacity: 8,
         regularPrice: 600,
@@ -92,7 +92,7 @@ const cabins = [
         reviews: [],
     },
     {
-        _id: '111',
+        _id: '5c8a1dfa2f8fb814b56fa111',
         name: "008",
         maxCapacity: 10,
         regularPrice: 1400,

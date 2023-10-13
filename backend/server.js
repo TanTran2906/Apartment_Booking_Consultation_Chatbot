@@ -1,7 +1,9 @@
 import express from 'express'
-import { cabins } from './data/cabins.js'
+// import cabins from './data/cabins.js'
+import cabinRoutes from './routes/cabinRoutes.js'
 import connectDB from './config/db.js'
 import dotenv from 'dotenv'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 dotenv.config()
 
 const port = process.env.PORT || 5000
@@ -14,14 +16,20 @@ app.get('/', (req, res) => {
     res.send('API is running...')
 })
 
-app.get('/api/cabins', (req, res) => {
-    res.json(cabins)
-})
+// app.get('/api/cabins', (req, res) => {
+//     res.json(cabins)
+// })
 
-app.get('/api/cabins/:id', (req, res) => {
-    const cabin = cabins.find(cabin => cabin._id === req.params.id)
-    res.json(cabin)
-})
+// app.get('/api/cabins/:id', (req, res) => {
+//     const cabin = cabins.find(cabin => cabin._id === req.params.id)
+//     res.json(cabin)
+// })
+
+app.use('/api/cabins', cabinRoutes)
+
+app.use(notFound)
+app.use(errorHandler)
+
 
 app.listen(port, () => console.log(`Server running on port ${port}`))
 

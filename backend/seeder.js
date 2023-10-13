@@ -1,59 +1,77 @@
-// import mongoose from 'mongoose';
-// import dotenv from 'dotenv';
-// import colors from 'colors';
-// import users from './data/users.js';
-// import products from './data/products.js';
-// import User from './models/userModel.js';
-// import Product from './models/productModel.js';
-// import Order from './models/orderModel.js';
-// import connectDB from './config/db.js';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import colors from 'colors';
 
-// dotenv.config();
+import cabins from './data/cabins.js';
+import bookings from './data/bookings.js';
+import users from './data/users.js';
+import services from './data/services.js';
+import invoices from './data/invoices.js';
 
-// connectDB();
+import User from './models/userModel.js';
+import Service from './models/serviceModel.js';
+import Invoice from './models/invoiceModel.js';
+import Cabin from './models/cabinModel.js';
+import Booking from './models/bookingModel.js';
 
-// const importData = async () => {
-//     try {
-//         await Order.deleteMany();
-//         await Product.deleteMany();
-//         await User.deleteMany();
+import connectDB from './config/db.js';
 
-//         const createdUsers = await User.insertMany(users);
+dotenv.config();
 
-//         const adminUser = createdUsers[0]._id;
+connectDB();
 
-//         const sampleProducts = products.map((product) => {
-//             return { ...product, user: adminUser };
-//         });
+const importData = async () => {
+    try {
+        await User.deleteMany();
+        await Cabin.deleteMany();
+        await Service.deleteMany();
+        await Booking.deleteMany();
+        await Invoice.deleteMany();
 
-//         await Product.insertMany(sampleProducts);
+        // ==== Thêm data cabin kèm theo id admin
+        // const createdUsers = await User.insertMany(users);
 
-//         console.log('Data Imported!'.green.inverse);
-//         process.exit();
-//     } catch (error) {
-//         console.error(`${error}`.red.inverse);
-//         process.exit(1);
-//     }
-// };
+        // const adminUser = createdUsers[0]._id;
 
-// const destroyData = async () => {
-//     try {
-//         await Order.deleteMany();
-//         await Product.deleteMany();
-//         await User.deleteMany();
+        // const sampleCabins = cabins.map((cabin) => {
+        //     return { ...cabin, user: adminUser };
+        // });
 
-//         console.log('Data Destroyed!'.red.inverse);
-//         process.exit();
-//     } catch (error) {
-//         console.error(`${error}`.red.inverse);
-//         process.exit(1);
-//     }
-// };
+        await Cabin.insertMany(cabins);
+        await User.insertMany(users);
+        await Service.insertMany(services);
+        await Booking.insertMany(bookings);
+        await Invoice.insertMany(invoices);
 
-// // console.log(process.argv)
+        console.log('Data Imported!'.green.inverse);
+        process.exit();
 
-// if (process.argv[2] === '-d') {
-//     destroyData();
-// } else {
-//     importData();
-// }
+    } catch (error) {
+        console.error(`${error}`.red.inverse);
+        process.exit(1);
+    }
+};
+
+const destroyData = async () => {
+    try {
+        await User.deleteMany();
+        await Cabin.deleteMany();
+        await Service.deleteMany();
+        await Booking.deleteMany();
+        await Invoice.deleteMany();
+
+        console.log('Data Destroyed!'.red.inverse);
+        process.exit();
+    } catch (error) {
+        console.error(`${error}`.red.inverse);
+        process.exit(1);
+    }
+};
+
+console.log(process.argv)
+
+if (process.argv[2] === '-d') {
+    destroyData();
+} else {
+    importData();
+}
