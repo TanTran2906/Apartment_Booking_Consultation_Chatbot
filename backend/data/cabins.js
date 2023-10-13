@@ -1,7 +1,7 @@
 
-export const cabins = [
+const cabins = [
     {
-        _id: '1',
+        _id: '104',
         name: '001',
         maxCapacity: 2,
         regularPrice: 250,
@@ -14,7 +14,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '2',
+        _id: '105',
         name: '002',
         maxCapacity: 2,
         regularPrice: 350,
@@ -27,7 +27,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '3',
+        _id: '106',
         name: "003",
         maxCapacity: 4,
         regularPrice: 300,
@@ -40,7 +40,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '4',
+        _id: '107',
         name: "004",
         maxCapacity: 4,
         regularPrice: 500,
@@ -53,7 +53,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '5',
+        _id: '108',
         name: "005",
         maxCapacity: 6,
         regularPrice: 350,
@@ -66,7 +66,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '6',
+        _id: '109',
         name: "006",
         maxCapacity: 6,
         regularPrice: 800,
@@ -79,7 +79,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '7',
+        _id: '110',
         name: "007",
         maxCapacity: 8,
         regularPrice: 600,
@@ -92,7 +92,7 @@ export const cabins = [
         reviews: [],
     },
     {
-        _id: '8',
+        _id: '111',
         name: "008",
         maxCapacity: 10,
         regularPrice: 1400,
@@ -106,3 +106,5 @@ export const cabins = [
     },
 
 ];
+
+export default cabins;

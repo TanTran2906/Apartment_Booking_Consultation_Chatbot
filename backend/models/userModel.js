@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const userSchema = mongoose.Schema(
     {
-        name: {
+        fullName: {
             type: String,
             required: [true, 'Please tell us your name']
         },
@@ -15,7 +15,7 @@ const userSchema = mongoose.Schema(
         },
         photo: {
             type: String,
-            default: 'default.jpg',
+            default: '/users/default.jpg',
         },
         nationalID: {
             type: String,
@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema(
         },
         passwordConfirm: {
             type: String,
-            required: [true, 'Please confirm your password'],
+            // required: [true, 'Please confirm your password'],
             //Chỉ hoạt động khi create hoặc save , not update!!!!!!!!!!!!!!!!!!!!
             validate: {
                 validator: function (el) {

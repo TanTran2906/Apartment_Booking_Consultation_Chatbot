@@ -1,0 +1,28 @@
+const invoices = [
+    { _id: '1', created_at: '2023-09-11T04:25:41.411Z', booking: '651' },
+    { _id: '2', created_at: '2023-09-11T04:26:42.411Z', booking: '652' },
+    { _id: '3', created_at: '2023-09-11T04:27:43.411Z', booking: '653' },
+    { _id: '4', created_at: '2023-09-11T04:28:44.411Z', booking: '654' },
+    { _id: '5', created_at: '2023-09-11T04:29:45.411Z', booking: '655' },
+    { _id: '6', created_at: '2023-09-11T04:30:46.411Z', booking: '656' },
+    { _id: '7', created_at: '2023-09-11T04:31:47.411Z', booking: '657' },
+    { _id: '8', created_at: '2023-09-11T04:32:48.411Z', booking: '658' },
+    { _id: '9', created_at: '2023-09-11T04:33:49.411Z', booking: '659' },
+    { _id: '10', created_at: '2023-09-11T04:34:50.411Z', booking: '660' },
+    { _id: '11', created_at: '2023-09-11T04:35:51.411Z', booking: '661' },
+    { _id: '12', created_at: '2023-09-11T04:36:52.411Z', booking: '662' },
+    { _id: '13', created_at: '2023-09-11T04:37:53.411Z', booking: '663' },
+    { _id: '14', created_at: '2023-09-11T04:38:54.411Z', booking: '664' },
+    { _id: '15', created_at: '2023-09-11T04:39:55.411Z', booking: '665' },
+    { _id: '16', created_at: '2023-09-11T04:40:56.411Z', booking: '666' },
+    { _id: '17', created_at: '2023-09-11T04:41:57.411Z', booking: '667' },
+    { _id: '18', created_at: '2023-09-11T04:42:58.411Z', booking: '668' },
+    { _id: '19', created_at: '2023-09-11T04:43:59.411Z', booking: '669' },
+    { _id: '20', created_at: '2023-09-11T04:44:41.411Z', booking: '670' },
+    { _id: '21', created_at: '2023-09-11T04:45:41.411Z', booking: '671' },
+    { _id: '22', created_at: '2023-09-11T04:46:41.411Z', booking: '672' },
+    { _id: '23', created_at: '2023-09-11T04:47:41.411Z', booking: '673' },
+    { _id: '24', created_at: '2023-09-11T04:48:41.411Z', booking: '674' },
+];
+
+export default invoices
