@@ -1,8 +1,11 @@
+import path from 'path';
 import express from 'express'
-// import cabins from './data/cabins.js'
-import cabinRoutes from './routes/cabinRoutes.js'
 import connectDB from './config/db.js'
 import dotenv from 'dotenv'
+// import cookieParser from 'cookie-parser'
+
+import cabinRoutes from './routes/cabinRoutes.js'
+
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 dotenv.config()
 
@@ -12,22 +15,29 @@ connectDB() //Connect to MongoDB
 
 const app = express()
 
+//Body parser middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+//Cookie parser middleware
+// app.use(cookieParser())
+
 app.get('/', (req, res) => {
     res.send('API is running...')
 })
 
-// app.get('/api/cabins', (req, res) => {
-//     res.json(cabins)
-// })
-
-// app.get('/api/cabins/:id', (req, res) => {
-//     const cabin = cabins.find(cabin => cabin._id === req.params.id)
-//     res.json(cabin)
-// })
-
 app.use('/api/cabins', cabinRoutes)
 
-app.use(notFound)
+//Handling error route
+app.all('*', (req, res, next) => {
+
+    const err = new Error(`Can't find ${req.originalUrl} on this server`)
+    err.statusCode = 404
+    err.status = 'fail'
+
+    //Truyền đến middleware xử lý lỗi cuối cùng, bỏ qua mọi middleware còn lại
+    // next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
+})
 app.use(errorHandler)
 
 

@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { toast } from "react-hot-toast";
+
 // import { HiPencil, HiTrash, HiSquare2Stack } from "react-icons/hi2";
 
 // import Menus from "ui/Menus";
@@ -7,6 +9,7 @@ import styled from "styled-components";
 // import Table from "ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
+import { useDeleteCabinMutation } from "../../slices/cabinSlice";
 // import { useDeleteCabin } from "./useDeleteCabin";
 // import { useCreateCabin } from "./useCreateCabin";
 // import CreateCabinForm from "./CreateCabinForm";
@@ -52,9 +55,9 @@ const Discount = styled.div`
     color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin }) {
+function CabinRow({ cabin, refetch }) {
     const {
-        id: cabinId,
+        _id: cabinId,
         name,
         maxCapacity,
         regularPrice,
@@ -62,6 +65,20 @@ function CabinRow({ cabin }) {
         image,
         description,
     } = cabin;
+
+    const [deleteCabin, { isLoading: isDeleting }] = useDeleteCabinMutation();
+
+    const deleteHandler = async (id) => {
+        if (window.confirm("Are you sure?")) {
+            try {
+                await deleteCabin(id);
+                toast.success("Cabin successfully deleted");
+                refetch();
+            } catch (err) {
+                toast.error(err?.data?.message || err.error);
+            }
+        }
+    };
 
     // const { mutate: deleteCabin, isLoading: isDeleting } = useDeleteCabin();
     // const { mutate: createCabin } = useCreateCabin();
@@ -92,6 +109,13 @@ function CabinRow({ cabin }) {
             ) : (
                 <span>&mdash;</span>
             )}
+
+            <button
+                onClick={() => deleteHandler(cabinId)}
+                disabled={isDeleting}
+            >
+                Delete
+            </button>
 
             {/* <div>
         <ButtonWithConfirm
