@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabinMutation } from "../../slices/cabinSlice";
+import CreateCabinForm from "./CreateCabinForm";
 // import { useDeleteCabin } from "./useDeleteCabin";
 // import { useCreateCabin } from "./useCreateCabin";
 // import CreateCabinForm from "./CreateCabinForm";
@@ -95,29 +96,30 @@ function CabinRow({ cabin, refetch }) {
     // }
 
     return (
-        <TableRow role="row">
-            <Img src={image} alt={`Cabin ${name}`} />
+        <>
+            <TableRow role="row">
+                <Img src={image} alt={`Cabin ${name}`} />
 
-            <Cabin>{name}</Cabin>
+                <Cabin>{name}</Cabin>
 
-            <div>Fits up to {maxCapacity} guests</div>
+                <div>Fits up to {maxCapacity} guests</div>
 
-            <Price>{formatCurrency(regularPrice)}</Price>
+                <Price>{formatCurrency(regularPrice)}</Price>
 
-            {discount ? (
-                <Discount>{formatCurrency(discount)}</Discount>
-            ) : (
-                <span>&mdash;</span>
-            )}
+                {discount ? (
+                    <Discount>{formatCurrency(discount)}</Discount>
+                ) : (
+                    <span>&mdash;</span>
+                )}
 
-            <button
-                onClick={() => deleteHandler(cabinId)}
-                disabled={isDeleting}
-            >
-                Delete
-            </button>
+                <button
+                    onClick={() => deleteHandler(cabinId)}
+                    disabled={isDeleting}
+                >
+                    Delete
+                </button>
 
-            {/* <div>
+                {/* <div>
         <ButtonWithConfirm
           title='Delete cabin'
           description='Are you sure you want to delete this cabin? This action can NOT be undone.'
@@ -131,7 +133,7 @@ function CabinRow({ cabin, refetch }) {
         <Link to={`/cabins/${cabinId}`}>Details &rarr;</Link>
       </div> */}
 
-            {/* <Modal>
+                {/* <Modal>
                 <Menus.Menu>
                     <Menus.Toggle id={cabinId} />
 
@@ -170,7 +172,10 @@ function CabinRow({ cabin, refetch }) {
                     />
                 </Modal.Window>
             </Modal> */}
-        </TableRow>
+            </TableRow>
+
+            <CreateCabinForm cabinToEdit={cabin} />
+        </>
     );
 }
 

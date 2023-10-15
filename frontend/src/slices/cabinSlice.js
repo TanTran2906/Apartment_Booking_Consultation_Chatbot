@@ -1,4 +1,4 @@
-import { CABINS_URL } from '../utils/constants.js';
+import { CABINS_URL, UPLOADS_URL } from '../utils/constants.js';
 import { apiSlice } from './apiSlice';
 
 export const cabinSlice = apiSlice.injectEndpoints({
@@ -23,12 +23,26 @@ export const cabinSlice = apiSlice.injectEndpoints({
             providesTags: ['Cabin'],
         }),
         createCabin: builder.mutation({
-            query: (data) => ({
+            query: () => ({
                 url: `${CABINS_URL}`,
                 method: 'POST',
-                body: { ...data },
             }),
             invalidatesTags: ['Cabin'],
+        }),
+        updateCabin: builder.mutation({
+            query: (data) => ({
+                url: `${CABINS_URL}/${data.editId}`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Cabin'], //From getCabins()
+        }),
+        uploadCabinImage: builder.mutation({
+            query: (data) => ({
+                url: UPLOADS_URL,
+                method: 'POST',
+                body: data,
+            }),
         }),
 
 
@@ -36,4 +50,4 @@ export const cabinSlice = apiSlice.injectEndpoints({
 });
 
 //useGetCabinsQuery bản chất nó là getCabins
-export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation } = cabinSlice;
+export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation, useUpdateCabinMutation, useUploadCabinImageMutation } = cabinSlice;

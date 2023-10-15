@@ -26,13 +26,12 @@ const cabinSchema = mongoose.Schema(
         name: {
             type: String,
             required: [true, 'A cabin must be have a name'],
-            unique: true,
             trim: true,
             maxlength: [40, 'A cabin name must have less or equal than 40'],
         },
         image: {
             type: String,
-            required: [true, 'A cabin must be have an image'],
+            // required: [true, 'A cabin must be have an image'],
         },
         maxCapacity: {
             type: Number,
@@ -46,7 +45,7 @@ const cabinSchema = mongoose.Schema(
             type: Number,
             validate: {
                 validator: function (val) {
-                    return val < this.regularPrice //val: do người dùng chỉ định : 100 < 200
+                    return val <= this.regularPrice //val: do người dùng chỉ định : 100 < 200
                 },
                 message: 'Discount price ({VALUE}) should be below regular price'
             }

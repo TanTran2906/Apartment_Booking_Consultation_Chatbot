@@ -12,7 +12,12 @@ import FileInput from "../../ui/FileInput";
 import { Textarea } from "../../ui/Textarea";
 
 import { toast } from "react-hot-toast";
-import { useCreateCabinMutation } from "../../slices/cabinSlice";
+import {
+    useGetCabinDetailsQuery,
+    useUpdateCabinMutation,
+    useUploadCabinImageMutation,
+} from "../../slices/cabinSlice";
+import { useState, useParams, useEffect } from "react";
 
 const FormRow = styled.div`
     display: grid;
@@ -51,21 +56,81 @@ const Error = styled.span`
 `;
 
 // Receives closeModal directly from Modal
-function CreateCabinForm() {
-    const { register, handleSubmit, reset } = useForm();
-    const [createCabin, { isLoading: isCreating }] = useCreateCabinMutation();
+function CreateCabinForm({ cabinToEdit }) {
+    // const { id: cabinId } = useParams();
+    const [imageUpload, setImage] = useState("");
 
-    function onSubmit(data) {
-        createCabin(data);
+    const { _id: editId, ...editValues } = cabinToEdit;
+    const isEditSession = Boolean(editId);
+    // console.log(editId);
+
+    const { register, handleSubmit, reset, getValues, formState } = useForm({
+        defaultValues: isEditSession ? editValues : {},
+    });
+
+    const { errors } = formState;
+
+    const { refetch } = useGetCabinDetailsQuery(editId);
+    const [updateCabin, { isLoading: isUpdating }] = useUpdateCabinMutation();
+    const [uploadCabinImage, { isLoading: isUploadImage }] =
+        useUploadCabinImageMutation();
+
+    async function onSubmit(data) {
+        let { name, maxCapacity, image, regularPrice, discount, description } =
+            data;
         console.log(data);
-        reset();
+
+        image = imageUpload;
+
+        try {
+            await updateCabin({
+                editId,
+                name,
+                maxCapacity,
+                image,
+                regularPrice,
+                discount,
+                description,
+            });
+            toast.success("Cabin successfully updated");
+            refetch();
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    }
+
+    const uploadFileHandler = async (e) => {
+        const formData = new FormData();
+        formData.append("image", e.target.files[0]);
+        try {
+            const res = await uploadCabinImage(formData).unwrap();
+            console.log(res);
+
+            toast.success(res.message);
+            setImage(res.image);
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    };
+
+    function onError(errors) {
+        console.log(errors);
     }
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
             <FormRow>
                 <Label htmlFor="name">Cabin name</Label>
-                <Input type="text" id="name" {...register("name")} />
+                <Input
+                    type="text"
+                    id="name"
+                    disabled={isUpdating}
+                    defaultValue=""
+                    {...register("name", {
+                        required: "This field is required",
+                    })}
+                />
+                {errors?.name?.message && <Error>{errors.name.message}</Error>}
             </FormRow>
 
             <FormRow>
@@ -73,8 +138,19 @@ function CreateCabinForm() {
                 <Input
                     type="number"
                     id="maxCapacity"
-                    {...register("maxCapacity")}
+                    disabled={isUpdating}
+                    defaultValue={1}
+                    {...register("maxCapacity", {
+                        required: "This field is required",
+                        min: {
+                            value: 1,
+                            message: "Capacity should be at least 1",
+                        },
+                    })}
                 />
+                {errors?.maxCapacity?.message && (
+                    <Error>{errors.maxCapacity.message}</Error>
+                )}
             </FormRow>
 
             <FormRow>
@@ -82,8 +158,19 @@ function CreateCabinForm() {
                 <Input
                     type="number"
                     id="regularPrice"
-                    {...register("regularPrice")}
+                    disabled={isUpdating}
+                    defaultValue={10}
+                    {...register("regularPrice", {
+                        required: "This field is required",
+                        min: {
+                            value: 1,
+                            message: "Regular price should be at least 1",
+                        },
+                    })}
                 />
+                {errors?.regularPrice?.message && (
+                    <Error>{errors.regularPrice.message}</Error>
+                )}
             </FormRow>
 
             <FormRow>
@@ -91,9 +178,19 @@ function CreateCabinForm() {
                 <Input
                     type="number"
                     id="discount"
+                    disabled={isUpdating}
+                    // defaultValue={0}
                     defaultValue={0}
-                    {...register("discount")}
+                    {...register("discount", {
+                        required: "This field is required",
+                        validate: (value) =>
+                            Number(value) <= getValues().regularPrice ||
+                            "Discount should be less than regular price",
+                    })}
                 />
+                {errors?.discount?.message && (
+                    <Error>{errors.discount.message}</Error>
+                )}
             </FormRow>
 
             <FormRow>
@@ -101,14 +198,35 @@ function CreateCabinForm() {
                 <Textarea
                     type="number"
                     id="description"
+                    disabled={isUpdating}
                     defaultValue=""
-                    {...register("description")}
+                    {...register("description", {
+                        required: "This field is required",
+                    })}
                 />
+                {errors?.description?.message && (
+                    <Error>{errors.description.message}</Error>
+                )}
             </FormRow>
 
             <FormRow>
                 <Label htmlFor="image">Cabin photo</Label>
-                <FileInput id="image" accept="image/*" type="file" />
+                <FileInput
+                    id="image"
+                    accept="image/*"
+                    type="file"
+                    defaultValue=""
+                    onChange={(e) => {
+                        const selectedFile = e.target.files[0];
+                        if (selectedFile) {
+                            setImage(selectedFile);
+                            uploadFileHandler(selectedFile);
+                        }
+                    }}
+                    {...register("image", {
+                        required: "This field is required",
+                    })}
+                />
             </FormRow>
 
             <FormRow>
@@ -116,7 +234,7 @@ function CreateCabinForm() {
                 <Button variation="secondary" type="reset">
                     Cancel
                 </Button>
-                <Button>Add cabin</Button>
+                <Button disabled={isUpdating}>Update cabin</Button>
             </FormRow>
         </Form>
     );

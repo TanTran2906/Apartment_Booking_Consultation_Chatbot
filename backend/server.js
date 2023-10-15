@@ -2,11 +2,17 @@ import path from 'path';
 import express from 'express'
 import connectDB from './config/db.js'
 import dotenv from 'dotenv'
+import morgan from 'morgan';
 // import cookieParser from 'cookie-parser'
 
 import cabinRoutes from './routes/cabinRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 
-import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import AppError from './middleware/appError.js';
+import { errorHandler } from './middleware/errorMiddleware.js'
+
+
+
 dotenv.config()
 
 const port = process.env.PORT || 5000
@@ -14,6 +20,10 @@ const port = process.env.PORT || 5000
 connectDB() //Connect to MongoDB
 
 const app = express()
+
+//Development logging
+if (process.env.NODE_ENV === "development")
+    app.use(morgan('dev'))
 
 //Body parser middleware
 app.use(express.json())
@@ -26,24 +36,42 @@ app.get('/', (req, res) => {
     res.send('API is running...')
 })
 
+/*============================== ROUTES ================================*/
 app.use('/api/cabins', cabinRoutes)
+
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+
+/*============================== HANDLE ERROR ================================*/
 
 //Handling error route
 app.all('*', (req, res, next) => {
-
-    const err = new Error(`Can't find ${req.originalUrl} on this server`)
-    err.statusCode = 404
-    err.status = 'fail'
-
     //Truyền đến middleware xử lý lỗi cuối cùng, bỏ qua mọi middleware còn lại
-    // next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
+    next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 })
+
+//Bắt lỗi mã đồng bộ --> khi một ngoại lệ không được xử lý
+process.on('uncaughtException', err => {
+    console.log('UNHANDLED EXCEPTION 🔥 Shutting down...');
+    console.log(err.name, err.message);
+    process.exit(1)
+})
+
+//Handling all error
 app.use(errorHandler)
 
-
-app.listen(port, () => console.log(`Server running on port ${port}`))
-
-
+const server = app.listen(port, () => console.log(`Server running on port ${port}`))
+//-	Lỗi thường liên quan đến kết nối DB (ví dụ như mật khẩu DB bị sai hoặc bị thay đổi,….)
+process.on('unhandledRejection', err => {
+    console.log('UNHANDLED REJECTION 🔥 Shutting down...');
+    console.log(err.name, err.message);
+    server.close(() => {
+        process.exit(1)
+    })
+})
 
 
 // import path from 'path';
