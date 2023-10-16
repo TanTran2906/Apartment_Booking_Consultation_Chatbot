@@ -13,7 +13,8 @@ export const cabinSlice = apiSlice.injectEndpoints({
             query: (cabinId) => ({
                 url: `${CABINS_URL}/${cabinId}`,
             }),
-            keepUnusedDataFor: 5,
+            invalidatesTags: ['Cabin'],
+
         }),
         deleteCabin: builder.mutation({
             query: (cabinId) => ({

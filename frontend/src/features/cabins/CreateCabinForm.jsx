@@ -13,11 +13,11 @@ import { Textarea } from "../../ui/Textarea";
 
 import { toast } from "react-hot-toast";
 import {
-    useGetCabinDetailsQuery,
+    useGetCabinsQuery,
     useUpdateCabinMutation,
     useUploadCabinImageMutation,
 } from "../../slices/cabinSlice";
-import { useState, useParams, useEffect } from "react";
+import { useState } from "react";
 
 const FormRow = styled.div`
     display: grid;
@@ -70,27 +70,25 @@ function CreateCabinForm({ cabinToEdit }) {
 
     const { errors } = formState;
 
-    const { refetch } = useGetCabinDetailsQuery(editId);
+    const { refetch } = useGetCabinsQuery();
     const [updateCabin, { isLoading: isUpdating }] = useUpdateCabinMutation();
     const [uploadCabinImage, { isLoading: isUploadImage }] =
         useUploadCabinImageMutation();
 
     async function onSubmit(data) {
-        let { name, maxCapacity, image, regularPrice, discount, description } =
-            data;
-        console.log(data);
-
-        image = imageUpload;
-
+        console.log(data, data.image[0]);
         try {
+            if (data.image && data.image[0]) {
+                await uploadFileHandler(data.image[0]);
+            }
+
+            const image = imageUpload;
+            console.log(image);
+
             await updateCabin({
+                ...data,
                 editId,
-                name,
-                maxCapacity,
                 image,
-                regularPrice,
-                discount,
-                description,
             });
             toast.success("Cabin successfully updated");
             refetch();
@@ -99,12 +97,12 @@ function CreateCabinForm({ cabinToEdit }) {
         }
     }
 
-    const uploadFileHandler = async (e) => {
+    const uploadFileHandler = async (image) => {
         const formData = new FormData();
-        formData.append("image", e.target.files[0]);
+        formData.append("image", image);
         try {
             const res = await uploadCabinImage(formData).unwrap();
-            console.log(res);
+            // console.log(res);
 
             toast.success(res.message);
             setImage(res.image);
@@ -215,14 +213,7 @@ function CreateCabinForm({ cabinToEdit }) {
                     id="image"
                     accept="image/*"
                     type="file"
-                    defaultValue=""
-                    onChange={(e) => {
-                        const selectedFile = e.target.files[0];
-                        if (selectedFile) {
-                            setImage(selectedFile);
-                            uploadFileHandler(selectedFile);
-                        }
-                    }}
+                    onChange={uploadFileHandler}
                     {...register("image", {
                         required: "This field is required",
                     })}
