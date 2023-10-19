@@ -11,6 +11,10 @@ import { toast } from "react-hot-toast";
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabinMutation } from "../../slices/cabinSlice";
 import CreateCabinForm from "./CreateCabinForm";
+import { HiPencil, HiTrash } from "react-icons/hi2";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Menus from "../../ui/Menus";
 // import { useDeleteCabin } from "./useDeleteCabin";
 // import { useCreateCabin } from "./useCreateCabin";
 // import CreateCabinForm from "./CreateCabinForm";
@@ -70,14 +74,12 @@ function CabinRow({ cabin, refetch }) {
     const [deleteCabin, { isLoading: isDeleting }] = useDeleteCabinMutation();
 
     const deleteHandler = async (id) => {
-        if (window.confirm("Are you sure?")) {
-            try {
-                await deleteCabin(id);
-                toast.success("Cabin successfully deleted");
-                refetch();
-            } catch (err) {
-                toast.error(err?.data?.message || err.error);
-            }
+        try {
+            await deleteCabin(id);
+            toast.success("Cabin successfully deleted");
+            refetch();
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
         }
     };
 
@@ -112,12 +114,69 @@ function CabinRow({ cabin, refetch }) {
                     <span>&mdash;</span>
                 )}
 
-                <button
-                    onClick={() => deleteHandler(cabinId)}
-                    disabled={isDeleting}
-                >
-                    Delete
-                </button>
+                <div>
+                    {/* <button
+                        onClick={() => deleteHandler(cabinId)}
+                        disabled={isDeleting}
+                    >
+                        <HiTrash />
+                    </button> */}
+                    <Modal>
+                        <Menus.Menu>
+                            <Menus.Toggle id={cabinId} />
+
+                            <Menus.List id={cabinId}>
+                                <Modal.Open opens="edit">
+                                    <Menus.Button icon={<HiPencil />}>
+                                        Edit
+                                    </Menus.Button>
+                                </Modal.Open>
+
+                                <Modal.Open opens="confirm-delete">
+                                    <Menus.Button icon={<HiTrash />}>
+                                        Delete
+                                    </Menus.Button>
+                                </Modal.Open>
+                            </Menus.List>
+
+                            <Modal.Window name="edit">
+                                <CreateCabinForm cabinToEdit={cabin} />
+                            </Modal.Window>
+
+                            <Modal.Window name="confirm-delete">
+                                <ConfirmDelete
+                                    resourceName="cabin"
+                                    disabled={isDeleting}
+                                    onConfirm={() => deleteHandler(cabinId)}
+                                />
+                            </Modal.Window>
+                        </Menus.Menu>
+                    </Modal>
+
+                    {/* <Modal>
+                        <Modal.Open opens="confirm-delete">
+                            <button>
+                                <HiTrash />
+                            </button>
+                        </Modal.Open>
+                        <Modal.Window name="confirm-delete">
+                            <ConfirmDelete
+                                resourceName="cabin"
+                                disabled={isDeleting}
+                                onConfirm={() => deleteHandler(cabinId)}
+                            />
+                        </Modal.Window>
+
+                        <Modal.Open opens="edit">
+                            <button>
+                                <HiPencil />
+                            </button>
+                        </Modal.Open>
+                        <Modal.Window name="edit">
+                            <CreateCabinForm cabinToEdit={cabin} />
+                        </Modal.Window>
+                    </Modal> */}
+                </div>
 
                 {/* <div>
         <ButtonWithConfirm
@@ -174,7 +233,7 @@ function CabinRow({ cabin, refetch }) {
             </Modal> */}
             </TableRow>
 
-            <CreateCabinForm cabinToEdit={cabin} />
+            {/* <CreateCabinForm cabinToEdit={cabin} /> */}
         </>
     );
 }

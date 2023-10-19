@@ -17,12 +17,12 @@ import {
     useUpdateCabinMutation,
     useUploadCabinImageMutation,
 } from "../../slices/cabinSlice";
-import { useState } from "react";
 
 const FormRow = styled.div`
     display: grid;
     align-items: center;
-    grid-template-columns: 24rem 1fr 1.2fr;
+    grid-template-columns: 24rem auto;
+    /* grid-template-columns: 24rem 1fr 1.2fr; */
     gap: 2.4rem;
 
     padding: 1.2rem 0;
@@ -57,34 +57,34 @@ const Error = styled.span`
 
 // Receives closeModal directly from Modal
 function CreateCabinForm({ cabinToEdit }) {
-    // const { id: cabinId } = useParams();
-    const [imageUpload, setImage] = useState("");
-
     const { _id: editId, ...editValues } = cabinToEdit;
     const isEditSession = Boolean(editId);
-    // console.log(editId);
 
-    const { register, handleSubmit, reset, getValues, formState } = useForm({
+    // console.log(editValues);
+
+    const { register, handleSubmit, getValues, formState } = useForm({
         defaultValues: isEditSession ? editValues : {},
     });
-
     const { errors } = formState;
 
     const { refetch } = useGetCabinsQuery();
     const [updateCabin, { isLoading: isUpdating }] = useUpdateCabinMutation();
-    const [uploadCabinImage, { isLoading: isUploadImage }] =
-        useUploadCabinImageMutation();
+    const [uploadCabinImage] = useUploadCabinImageMutation();
 
     async function onSubmit(data) {
-        console.log(data, data.image[0]);
+        let image;
+
         try {
+            // Kiểm tra xem người dùng đã chọn tệp hình ảnh mới hay chưa
             if (data.image && data.image[0]) {
-                await uploadFileHandler(data.image[0]);
+                // Nếu có, tải lên hình ảnh mới
+                image = await uploadFileHandler(data.image[0]);
+            } else {
+                // Nếu không, sử dụng đường dẫn hình ảnh hiện có
+                image = data.image;
             }
 
-            const image = imageUpload;
-            console.log(image);
-
+            // Cập nhật cabin với dữ liệu và hình ảnh (có thể mới hoặc cũ)
             await updateCabin({
                 ...data,
                 editId,
@@ -102,10 +102,9 @@ function CreateCabinForm({ cabinToEdit }) {
         formData.append("image", image);
         try {
             const res = await uploadCabinImage(formData).unwrap();
-            // console.log(res);
 
             toast.success(res.message);
-            setImage(res.image);
+            return res.image;
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
@@ -157,7 +156,7 @@ function CreateCabinForm({ cabinToEdit }) {
                     type="number"
                     id="regularPrice"
                     disabled={isUpdating}
-                    defaultValue={10}
+                    defaultValue={1}
                     {...register("regularPrice", {
                         required: "This field is required",
                         min: {
@@ -177,7 +176,6 @@ function CreateCabinForm({ cabinToEdit }) {
                     type="number"
                     id="discount"
                     disabled={isUpdating}
-                    // defaultValue={0}
                     defaultValue={0}
                     {...register("discount", {
                         required: "This field is required",
@@ -213,10 +211,10 @@ function CreateCabinForm({ cabinToEdit }) {
                     id="image"
                     accept="image/*"
                     type="file"
-                    onChange={uploadFileHandler}
-                    {...register("image", {
-                        required: "This field is required",
-                    })}
+                    // {...register("image", {
+                    //     required: "This field is required",
+                    // })}
+                    {...register("image")}
                 />
             </FormRow>
 

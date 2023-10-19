@@ -10,20 +10,19 @@ import {
 import { toast } from "react-hot-toast";
 import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
+import CabinTableOperations from "../features/cabins/CabinTableOperations";
 
 function Cabins() {
     const { refetch } = useGetCabinsQuery();
     const [createCabin, { isLoading: isCreating }] = useCreateCabinMutation();
 
     const createCabinHandler = async () => {
-        if (window.confirm("Are you sure you want to create a new cabin?")) {
-            try {
-                await createCabin();
-                toast.success("New cabin successfully created");
-                refetch();
-            } catch (err) {
-                toast.error(err?.data?.message || err.error);
-            }
+        try {
+            await createCabin();
+            toast.success("New cabin successfully created");
+            refetch();
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
         }
     };
 
@@ -31,7 +30,8 @@ function Cabins() {
         <>
             <Row type="horizontal">
                 <Heading as="h1">All cabins</Heading>
-                <p>TEST</p>
+
+                <CabinTableOperations />
             </Row>
 
             <Row>

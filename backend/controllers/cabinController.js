@@ -79,12 +79,37 @@ export const updateCabin = asyncHandler(async (req, res) => {
     const cabin = await Cabin.findById(req.params.id);
 
     if (cabin) {
-        cabin.name = name;
-        cabin.maxCapacity = maxCapacity;
-        cabin.regularPrice = regularPrice;
-        cabin.discount = discount;
-        cabin.image = image;
-        cabin.description = description;
+        // Chỉ cập nhật các trường khác khi cần
+        if (name) {
+            cabin.name = name;
+        }
+        if (maxCapacity) {
+            cabin.maxCapacity = maxCapacity;
+        }
+        if (regularPrice) {
+            cabin.regularPrice = regularPrice;
+        }
+        if (discount) {
+            cabin.discount = discount;
+        }
+        if (description) {
+            cabin.description = description;
+        }
+
+        // Nếu có image mới được cung cấp, thì cập nhật image
+        if (image) {
+            cabin.image = `${image.replace(/\\/g, '/')}`;
+        }
+        // cabin.name = name;
+        // cabin.maxCapacity = maxCapacity;
+        // cabin.regularPrice = regularPrice;
+        // cabin.discount = discount;
+        // // Check if a new image is uploaded, if not, use the existing image
+        // if (req.file) {
+        //     cabin.image = `/${req.file.path.replace(/\\/g, '/')}`;
+        // }
+        // // cabin.image = image;
+        // cabin.description = description;
 
         const updatedCabin = await cabin.save();
         res.status(200).json(updatedCabin);
