@@ -1,5 +1,5 @@
 import { CABINS_URL, UPLOADS_URL } from '../utils/constants.js';
-import { apiSlice } from './apiSlice';
+import { apiSlice } from './apiSlice.js';
 
 export const cabinSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
