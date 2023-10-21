@@ -68,7 +68,7 @@ function CabinRow({ cabin, refetch }) {
         regularPrice,
         discount,
         image,
-        description,
+        // description,
     } = cabin;
 
     const [deleteCabin, { isLoading: isDeleting }] = useDeleteCabinMutation();

@@ -9,7 +9,13 @@ export const bookingSlice = apiSlice.injectEndpoints({
             }),
             keepUnusedDataFor: 5,
         }),
+        getBookingDetails: builder.query({
+            query: (bookingId) => ({
+                url: `${BOOKINGS_URL}/${bookingId}`,
+            }),
+            invalidatesTags: ['Booking'],
+        }),
     }),
 })
 
-export const { useGetBookingsQuery } = bookingSlice
+export const { useGetBookingsQuery, useGetBookingDetailsQuery } = bookingSlice

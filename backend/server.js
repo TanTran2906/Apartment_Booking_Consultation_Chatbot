@@ -7,6 +7,7 @@ import morgan from 'morgan';
 
 import cabinRoutes from './routes/cabinRoutes.js'
 import bookingRoutes from './routes/bookingRoutes.js'
+import serviceRoutes from './routes/serviceRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 
 import AppError from './middleware/appError.js';
@@ -40,6 +41,8 @@ app.get('/', (req, res) => {
 /*============================== ROUTES ================================*/
 app.use('/api/cabins', cabinRoutes)
 app.use('/api/bookings', bookingRoutes)
+app.use('/api/services', serviceRoutes)
+
 
 app.use('/api/upload', uploadRoutes);
 

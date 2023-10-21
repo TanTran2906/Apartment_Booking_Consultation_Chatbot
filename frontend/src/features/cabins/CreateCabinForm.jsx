@@ -56,7 +56,7 @@ const Error = styled.span`
 `;
 
 // Receives closeModal directly from Modal
-function CreateCabinForm({ cabinToEdit }) {
+function CreateCabinForm({ cabinToEdit, onCloseModal }) {
     const { _id: editId, ...editValues } = cabinToEdit;
     const isEditSession = Boolean(editId);
 
@@ -91,6 +91,7 @@ function CreateCabinForm({ cabinToEdit }) {
                 image,
             });
             toast.success("Cabin successfully updated");
+            onCloseModal?.();
             refetch();
         } catch (err) {
             toast.error(err?.data?.message || err.error);

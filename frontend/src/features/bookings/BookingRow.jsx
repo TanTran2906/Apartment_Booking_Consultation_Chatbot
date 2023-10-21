@@ -62,7 +62,7 @@ const Amount = styled.div`
 
 function BookingRow({
     booking: {
-        id: bookingId,
+        _id: bookingId,
         bookingDate,
         startDate,
         endDate,
@@ -111,7 +111,30 @@ function BookingRow({
 
             <Amount>{formatCurrency(totalPrice)}</Amount>
 
-            {/* VIDEO we could export this into own component... */}
+            <Menus.Menu>
+                <Menus.Toggle id={bookingId} />
+
+                <Menus.List id={bookingId}>
+                    <Menus.Button
+                        icon={<HiEye />}
+                        onClick={() => navigate(`/admin/bookings/${bookingId}`)}
+                    >
+                        See details
+                    </Menus.Button>
+
+                    {status === "unconfirmed" && (
+                        <Menus.Button
+                            icon={<HiArrowDownOnSquare />}
+                            onClick={() =>
+                                navigate(`/admin/checkin/${bookingId}`)
+                            }
+                        >
+                            Check in
+                        </Menus.Button>
+                    )}
+                </Menus.List>
+            </Menus.Menu>
+
             {/* <Modal>
                 <Menus.Menu>
                     <Menus.Toggle id={bookingId} />

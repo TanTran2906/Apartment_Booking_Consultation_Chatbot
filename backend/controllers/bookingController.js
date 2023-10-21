@@ -34,3 +34,24 @@ export const getBookings = asyncHandler(async (req, res) => {
         return next(new AppError("Bookings could not be loaded", 500))
     }
 });
+
+// @desc    Get booking detail with cabin, user, and service data
+// @route   GET /api/bookings/:id
+// @access  Private/Admin
+
+export const getBooking = asyncHandler(async (req, res) => {
+    // Lấy ID của booking từ request params
+    const { id } = req.params;
+
+    // Sử dụng phương thức `populate` để lấy thông tin về cabin, user và service
+    const booking = await Booking.findById(id)
+        .populate('cabin')
+        .populate('user')
+        .populate('services');
+
+    if (booking) {
+        res.status(200).json(booking);
+    } else {
+        return next(new AppError("Booking not found", 404));
+    }
+});

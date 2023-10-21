@@ -113,7 +113,9 @@ function BookingTable() {
                 /> */}
 
                 <Table.Footer>
-                    <Pagination count={sortedBookings.length} />
+                    {sortedBookings.length > 10 && (
+                        <Pagination count={sortedBookings.length} />
+                    )}
                 </Table.Footer>
             </Table>
         </Menus>

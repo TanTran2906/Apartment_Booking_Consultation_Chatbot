@@ -5,7 +5,6 @@ import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import Users from "./pages/Users";
-import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
@@ -15,6 +14,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { Toaster } from "react-hot-toast";
+import Booking from "./pages/Booking";
+import Checkin from './pages/Checkin'
+import Services from "./pages/Services";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -40,9 +42,19 @@ function App() {
             />
             <Route path="admin/dashboard" element={<Dashboard />} />
             <Route path="admin/bookings" element={<Bookings />} />
+            <Route
+              path="admin/bookings/:bookingId"
+              element={<Booking />}
+            />
+            <Route
+              path="admin/checkin/:bookingId"
+              element={<Checkin />}
+            />
+
+
             <Route path="admin/cabins" element={<Cabins />} />
             <Route path="admin/users" element={<Users />} />
-            <Route path="admin/settings" element={<Settings />} />
+            <Route path="admin/services" element={<Services />} />
             <Route path="admin/account" element={<Account />} />
           </Route>
 
