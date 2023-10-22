@@ -31,6 +31,10 @@ const serviceSchema = mongoose.Schema(
             type: String,
             required: [true, 'A service must be have a description'],
         },
+        checked: {
+            type: Boolean,
+            default: false
+        },
 
     },
     {

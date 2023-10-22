@@ -1,19 +1,36 @@
-import Button from 'ui/Button';
-import { useCheckout } from './useCheckout';
+import Button from "../../ui/Button";
+// import { useCheckout } from './useCheckout';
+import {
+    useGetBookingsQuery,
+    useUpdateCheckOutBookingMutation,
+} from "../../slices/bookingSlice";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function CheckoutButton({ bookingId }) {
-  const { isLoading, mutate: checkout } = useCheckout();
+    const { refetch } = useGetBookingsQuery();
+    const navigate = useNavigate();
 
-  return (
-    <Button
-      variation='primary'
-      size='small'
-      onClick={() => checkout(bookingId)}
-      disabled={isLoading}
-    >
-      Check out
-    </Button>
-  );
+    const [updateCheckOutBooking, { isLoading: isUpdating }] =
+        useUpdateCheckOutBookingMutation();
+
+    async function handleCheckOut() {
+        await updateCheckOutBooking(bookingId);
+        toast.success(`Booking successfully checked out`);
+        refetch();
+        navigate("/admin/bookings");
+    }
+
+    return (
+        <Button
+            variation="primary"
+            size="small"
+            onClick={handleCheckOut}
+            disabled={isUpdating}
+        >
+            Check out
+        </Button>
+    );
 }
 
 export default CheckoutButton;

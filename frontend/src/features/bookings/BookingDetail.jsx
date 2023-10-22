@@ -15,6 +15,7 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import ButtonText from "../../ui/ButtonText";
 import Empty from "../../ui/Empty";
 import { useGetBookingDetailsQuery } from "../../slices/bookingSlice";
+import CheckoutButton from "../check-in-out/CheckoutButton";
 
 const HeadingGroup = styled.div`
     display: flex;
@@ -27,9 +28,9 @@ function BookingDetail() {
     // const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
     // const { mutate: checkout, isLoading: isCheckingOut } = useCheckout();
     const { bookingId } = useParams();
-    const { data: booking = {}, isLoading } =
-        useGetBookingDetailsQuery(bookingId);
-    // console.log(booking);
+    const { data: booking, isLoading } = useGetBookingDetailsQuery(bookingId, {
+        refetchOnMountOrArgChange: true, //tự động gọi lại getBookingDetails khi bookingId thay đổi hoặc khi component được mount.
+    });
 
     const moveBack = useMoveBack();
     const navigate = useNavigate();
@@ -67,16 +68,11 @@ function BookingDetail() {
                     </Button>
                 )}
 
-                {/* {status === "checked-in" && (
-                    <Button
-                        onClick={() => checkout(id)}
-                        disabled={isCheckingOut}
-                    >
-                        Check out
-                    </Button>
+                {status === "checked-in" && (
+                    <CheckoutButton bookingId={bookingId} />
                 )}
 
-                <Modal>
+                {/* <Modal>
                     <Modal.Toggle opens="delete">
                         <Button variation="danger">Delete booking</Button>
                     </Modal.Toggle>

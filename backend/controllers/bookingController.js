@@ -55,3 +55,50 @@ export const getBooking = asyncHandler(async (req, res) => {
         return next(new AppError("Booking not found", 404));
     }
 });
+
+// @desc    Update status when check-in 
+// @route   PUT /api/bookings/:id/checkin
+// @access  Private/Admin
+
+export const updateCheckInBooking = asyncHandler(async (req, res) => {
+    const { id } = req.params; // Sử dụng đúng biến id đã định nghĩa bởi route
+
+    // Kiểm tra xem có bản ghi đặt phòng với ID được cung cấp không
+    const booking = await Booking.findById(id);
+
+
+    if (!booking) {
+        return next(new AppError('No booking found with that ID', 404));
+    }
+
+    booking.status = 'checked-in';
+    booking.isPaid = true;
+
+    // Lưu bản ghi đã cập nhật
+    await booking.save();
+
+    res.status(200).json({ message: 'Booking updated successfully' });
+});
+
+// @desc    Update status when check-out
+// @route   PUT /api/bookings/:id/checkout
+// @access  Private/Admin
+
+export const updateCheckOutBooking = asyncHandler(async (req, res) => {
+    const { id } = req.params; // Sử dụng đúng biến id đã định nghĩa bởi route
+
+    // Kiểm tra xem có bản ghi đặt phòng với ID được cung cấp không
+    const booking = await Booking.findById(id);
+
+
+    if (!booking) {
+        return next(new AppError('No booking found with that ID', 404));
+    }
+
+    booking.status = 'checked-out';
+
+    // Lưu bản ghi đã cập nhật
+    await booking.save();
+
+    res.status(200).json({ message: 'Booking updated successfully' });
+});

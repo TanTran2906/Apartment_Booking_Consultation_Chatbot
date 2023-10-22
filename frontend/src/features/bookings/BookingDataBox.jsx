@@ -123,6 +123,12 @@ function BookingDataBox({ booking }) {
 
     const hasServices = Boolean(services.length);
     const cabinPrice = numNights * (regularPriceForCabin - discountForCabin);
+    const totalServiceCost = services.reduce((total, service) => {
+        const serviceCost =
+            (service.regularPrice - service.discount) * numGuests * numNights;
+        return total + serviceCost;
+    }, 0);
+    const total = cabinPrice + totalServiceCost;
 
     return (
         <StyledBookingDataBox>
@@ -179,7 +185,7 @@ function BookingDataBox({ booking }) {
                         icon={<HiOutlineCurrencyDollar />}
                         label={`Total price`}
                     >
-                        {formatCurrency(totalPrice)}
+                        {formatCurrency(total)}
 
                         {hasServices && (
                             <>
@@ -189,7 +195,8 @@ function BookingDataBox({ booking }) {
                                     .map(
                                         (service) =>
                                             `${formatCurrency(
-                                                service.regularPrice *
+                                                (service.regularPrice -
+                                                    service.discount) *
                                                     numGuests *
                                                     numNights
                                             )} ${service.name}`

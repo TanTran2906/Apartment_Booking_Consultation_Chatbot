@@ -8,18 +8,21 @@ import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 import Checkbox from "../../ui/Checkbox";
-
 import BookingDataBox from "../../features/bookings/BookingDataBox";
 
-// import { useBooking } from "../../features/bookings/useBooking";
 import { useMoveBack } from "../../hooks/useMoveBack";
-// import { useCheckin } from "./useCheckin";
 
 import styled from "styled-components";
-import { useGetBookingDetailsQuery } from "../../slices/bookingSlice";
-import { useParams } from "react-router-dom";
-// import { box } from "styles/styles";
-// import { useSettings } from "features/settings/useSettings";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
+import {
+    useGetBookingsQuery,
+    useGetBookingDetailsQuery,
+    useUpdateCheckinBookingMutation,
+} from "../../slices/bookingSlice";
+
+// import { useGetServicesQuery } from "../../slices/serviceSlice";
 
 const Box = styled.div`
     padding: 3.2rem 4rem;
@@ -28,39 +31,37 @@ const Box = styled.div`
 `;
 
 function CheckinBooking() {
-    const [confirmPaid, setConfirmPaid] = useState(false);
-    const [addBreakfast, setAddBreakfast] = useState(false);
-
-    // const { booking, isLoading } = useBooking();
     const { bookingId } = useParams();
-    const { data: booking = {}, isLoading } =
-        useGetBookingDetailsQuery(bookingId);
-    // const { mutate: checkin, isLoading: isCheckingIn } = useCheckin();
     const moveBack = useMoveBack();
-    // const { isLoading: isLoadingSettings, settings } = useSettings();
+    const navigate = useNavigate();
+
+    const [confirmPaid, setConfirmPaid] = useState(false);
+    // const [addService, setAddService] = useState(false);
+
+    // const { data: servicesData, isLoading: isLoadingServices } =
+    //     useGetServicesQuery();
+
+    const { refetch } = useGetBookingsQuery();
+    const [updateCheckinBooking, { isLoading: isUpdating }] =
+        useUpdateCheckinBookingMutation();
+    const { data: booking, isLoading: isLoadingBooking } =
+        useGetBookingDetailsQuery(bookingId);
 
     useEffect(() => setConfirmPaid(booking?.isPaid ?? false), [booking]);
 
-    if (isLoading) return <Spinner />;
+    if (isLoadingBooking) return <Spinner />;
 
-    // const { _id, guests, totalPrice, numGuests, hasBreakfast, numNights } =
-    //     booking;
-    const {
-        _id,
-        // bookingDate,
-        // startDate,
-        // endDate,
-        // numNights,
-        numGuests,
-        totalPrice,
-        // status,
-        // observations,
-        // isPaid,
-        user,
-        services,
-    } = booking;
+    const { totalPrice, user } = booking;
 
-    const hasService = Boolean(services.length);
+    // const hasService = Boolean(services.length);
+
+    async function handleCheckin() {
+        if (!confirmPaid) return;
+        await updateCheckinBooking(bookingId);
+        toast.success(`Booking successfully checked in`);
+        refetch();
+        navigate("/admin/bookings");
+    }
 
     // const optionalBreakfastPrice =
     //     numNights * settings.breakfastPrice * numGuests;
@@ -90,22 +91,39 @@ function CheckinBooking() {
 
             <BookingDataBox booking={booking} />
 
+            <Box>
+                <Checkbox
+                    checked={confirmPaid}
+                    disabled={confirmPaid || isUpdating}
+                    onChange={() => setConfirmPaid((confirm) => !confirm)}
+                    id="confirm"
+                >
+                    I confirm that {user.fullName} has paid the total amount of{" "}
+                    {formatCurrency(totalPrice)}
+                </Checkbox>
+            </Box>
+
             {/* LATER */}
-            {/* {!hasService && (
-                <Box>
-                    <Checkbox
-                        checked={addBreakfast}
-                        onChange={() => {
-                            setAddBreakfast((add) => !add);
-                            setConfirmPaid(false);
-                        }}
-                        id="breakfast"
-                    >
-                        Want to add breakfast for{" "}
-                        {formatCurrency(optionalBreakfastPrice)}?
-                    </Checkbox>
-                </Box>
-            )} */}
+            {/* {!hasService &&
+                servicesData.map((service) => (
+                    <Box>
+                        <Checkbox
+                            checked={addService}
+                            onChange={() => {
+                                setAddService((add) => !add);
+                                setConfirmPaid(false);
+                            }}
+                            id={service.name}
+                            key={service._id}
+                        >
+                            Want to add {service.name} for{" "}
+                            {formatCurrency(
+                                service.regularPrice - service.discount
+                            )}
+                            ?
+                        </Checkbox>
+                    </Box>
+                ))} */}
 
             {/* <Box>
                 <Checkbox
@@ -128,12 +146,12 @@ function CheckinBooking() {
             </Box> */}
 
             <ButtonGroup>
-                {/* <Button
+                <Button
                     onClick={handleCheckin}
-                    disabled={isCheckingIn || !confirmPaid}
+                    disabled={isUpdating || !confirmPaid}
                 >
                     Check in booking #{bookingId}
-                </Button> */}
+                </Button>
                 <Button variation="secondary" onClick={moveBack}>
                     Back
                 </Button>

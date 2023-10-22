@@ -54,6 +54,7 @@ export const createService = asyncHandler(async (req, res) => {
         image: '/services/sample.jpg',
         description:
             "The \"Windsurfing\" service at the hotel is a water sports activity held at sea, combining windsurfing and windsurfing. Visitors can experience the harmony between wind and ocean waves in a safe and professional environment. This service includes the loan of windsurfing equipment and instruction for beginners. Windsurfing is a fun activity to relax and enjoy the sea on a beautiful sunny day.",
+        checked: false
     });
 
     const createdService = await service.save();

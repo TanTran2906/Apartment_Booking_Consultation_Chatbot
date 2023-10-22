@@ -15,7 +15,21 @@ export const bookingSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Booking'],
         }),
+        updateCheckinBooking: builder.mutation({
+            query: (bookingId) => ({
+                url: `${BOOKINGS_URL}/checkin/${bookingId}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['Booking'],
+        }),
+        updateCheckOutBooking: builder.mutation({
+            query: (bookingId) => ({
+                url: `${BOOKINGS_URL}/checkout/${bookingId}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['Booking'],
+        }),
     }),
 })
 
-export const { useGetBookingsQuery, useGetBookingDetailsQuery } = bookingSlice
+export const { useGetBookingsQuery, useGetBookingDetailsQuery, useUpdateCheckinBookingMutation, useUpdateCheckOutBookingMutation } = bookingSlice

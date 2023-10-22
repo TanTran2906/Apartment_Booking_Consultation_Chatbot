@@ -19,6 +19,13 @@ import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 // import { useCheckout } from "../../features/check-in-out/useCheckout";
 import { format, isToday } from "date-fns";
+import { useEffect, useState } from "react";
+import CheckoutButton from "../check-in-out/CheckoutButton";
+import {
+    useGetBookingsQuery,
+    useUpdateCheckOutBookingMutation,
+} from "../../slices/bookingSlice";
+import { toast } from "react-hot-toast";
 
 // v1
 // const TableRow = styled.div`
@@ -60,10 +67,9 @@ const Amount = styled.div`
     font-weight: 500;
 `;
 
-function BookingRow({
-    booking: {
+function BookingRow({ booking }) {
+    const {
         _id: bookingId,
-        bookingDate,
         startDate,
         endDate,
         numNights,
@@ -71,19 +77,33 @@ function BookingRow({
         totalPrice,
         status,
         user: { fullName: guestName, email },
-        cabin: { name: cabinName },
-    },
-}) {
-    // const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
-    // const { mutate: checkout, isLoading: isCheckingOut } = useCheckout();
+        cabin: {
+            name: cabinName,
+            regularPrice: regularPriceForCabin,
+            discount: discountForCabin,
+        },
+        services,
+    } = booking;
 
     const navigate = useNavigate();
+
+    const { refetch } = useGetBookingsQuery();
+    const [updateCheckOutBooking, { isLoading: isUpdating }] =
+        useUpdateCheckOutBookingMutation();
+    // const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
 
     const statusToTagName = {
         unconfirmed: "blue",
         "checked-in": "green",
         "checked-out": "silver",
     };
+
+    async function handleCheckOut() {
+        await updateCheckOutBooking(bookingId);
+        toast.success(`Booking successfully checked out`);
+        refetch();
+        // navigate("/admin/bookings");
+    }
 
     return (
         <Table.Row role="row">
@@ -130,6 +150,16 @@ function BookingRow({
                             }
                         >
                             Check in
+                        </Menus.Button>
+                    )}
+
+                    {status === "checked-in" && (
+                        <Menus.Button
+                            onClick={handleCheckOut}
+                            disabled={isUpdating}
+                            icon={<HiArrowUpOnSquare />}
+                        >
+                            Check out
                         </Menus.Button>
                     )}
                 </Menus.List>

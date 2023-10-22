@@ -83,7 +83,7 @@ function BookingTable() {
 
     //Ví dụ : page = 1 thì sẽ lấy 10 kết quả đầu trong bảng dữ liệu (0-9 theo chỉ mục)
     const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
+    const to = from + PAGE_SIZE;
     // Lấy chỉ dữ liệu từ chỉ mục "from" đến "to" để hiển thị trên trang này
     const dataToDisplay = sortedBookings.slice(from, to);
 
