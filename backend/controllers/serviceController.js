@@ -6,7 +6,7 @@ import AppError from '../middleware/appError.js';
 // @desc    Fetch all services
 // @route   GET /api/services
 // @access  Public
-export const getServices = asyncHandler(async (req, res) => {
+export const getServices = asyncHandler(async (req, res, next) => {
     const services = await Service.find({});
     res.status(200).json(services);
 })
@@ -14,7 +14,7 @@ export const getServices = asyncHandler(async (req, res) => {
 // // @desc    Delete a service
 // // @route   DELETE /api/services/:id
 // // @access  Private/Admin
-export const deleteService = asyncHandler(async (req, res) => {
+export const deleteService = asyncHandler(async (req, res, next) => {
     const service = await Service.findById(req.params.id);
 
     if (service) {
@@ -30,7 +30,7 @@ export const deleteService = asyncHandler(async (req, res) => {
 // @desc    Fetch single service
 // @route   GET /api/services/:id
 // @access  Public
-export const getServiceById = asyncHandler(async (req, res) => {
+export const getServiceById = asyncHandler(async (req, res, next) => {
     const service = await Service.findById(req.params.id);
 
     if (service) {
@@ -45,7 +45,7 @@ export const getServiceById = asyncHandler(async (req, res) => {
 // @desc    Create a service
 // @route   POST /api/services
 // @access  Private/Admin
-export const createService = asyncHandler(async (req, res) => {
+export const createService = asyncHandler(async (req, res, next) => {
     const service = new Service({
         name: `Sample name ${[...Array(4)].map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('')}`,
         // user: req.user._id,
@@ -69,7 +69,7 @@ export const createService = asyncHandler(async (req, res) => {
 // @desc    Update a service
 // @route   PUT /api/services/:id
 // @access  Private/Admin
-export const updateService = asyncHandler(async (req, res) => {
+export const updateService = asyncHandler(async (req, res, next) => {
     const { name, regularPrice, discount, image, description } =
         req.body;
 

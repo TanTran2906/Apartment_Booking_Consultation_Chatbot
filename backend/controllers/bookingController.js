@@ -11,7 +11,7 @@ import Service from '../models/serviceModel.js'
 // @route   GET /api/bookings
 // @access  Private/Admin
 
-export const getBookings = asyncHandler(async (req, res) => {
+export const getBookings = asyncHandler(async (req, res, next) => {
     // Sử dụng .find() để lấy toàn bộ dữ liệu booking
     const bookings = await Booking.find()
         .populate({
@@ -39,7 +39,7 @@ export const getBookings = asyncHandler(async (req, res) => {
 // @route   GET /api/bookings/:id
 // @access  Private/Admin
 
-export const getBooking = asyncHandler(async (req, res) => {
+export const getBooking = asyncHandler(async (req, res, next) => {
     // Lấy ID của booking từ request params
     const { id } = req.params;
 
@@ -60,7 +60,7 @@ export const getBooking = asyncHandler(async (req, res) => {
 // @route   PUT /api/bookings/:id/checkin
 // @access  Private/Admin
 
-export const updateCheckInBooking = asyncHandler(async (req, res) => {
+export const updateCheckInBooking = asyncHandler(async (req, res, next) => {
     const { id } = req.params; // Sử dụng đúng biến id đã định nghĩa bởi route
 
     // Kiểm tra xem có bản ghi đặt phòng với ID được cung cấp không
@@ -84,7 +84,7 @@ export const updateCheckInBooking = asyncHandler(async (req, res) => {
 // @route   PUT /api/bookings/:id/checkout
 // @access  Private/Admin
 
-export const updateCheckOutBooking = asyncHandler(async (req, res) => {
+export const updateCheckOutBooking = asyncHandler(async (req, res, next) => {
     const { id } = req.params; // Sử dụng đúng biến id đã định nghĩa bởi route
 
     // Kiểm tra xem có bản ghi đặt phòng với ID được cung cấp không
@@ -101,4 +101,20 @@ export const updateCheckOutBooking = asyncHandler(async (req, res) => {
     await booking.save();
 
     res.status(200).json({ message: 'Booking updated successfully' });
+});
+
+// // @desc    Delete a booking
+// // @route   DELETE /api/bookings/:id
+// // @access  Private/Admin
+export const deleteBooking = asyncHandler(async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+
+    if (booking) {
+        await Booking.deleteOne({ _id: booking._id });
+        res.status(204).json({
+            message: 'Booking removed'
+        });
+    } else {
+        return next(new AppError('No booking found with that ID', 404))
+    }
 });

@@ -9,9 +9,12 @@ import cabinRoutes from './routes/cabinRoutes.js'
 import bookingRoutes from './routes/bookingRoutes.js'
 import serviceRoutes from './routes/serviceRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 import AppError from './middleware/appError.js';
 import { errorHandler } from './middleware/errorMiddleware.js'
+import cookieParser from 'cookie-parser'
+
 
 
 
@@ -32,7 +35,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 //Cookie parser middleware
-// app.use(cookieParser())
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     res.send('API is running...')
@@ -42,6 +45,7 @@ app.get('/', (req, res) => {
 app.use('/api/cabins', cabinRoutes)
 app.use('/api/bookings', bookingRoutes)
 app.use('/api/services', serviceRoutes)
+app.use('/api/users', userRoutes);
 
 
 app.use('/api/upload', uploadRoutes);

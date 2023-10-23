@@ -6,7 +6,7 @@ import AppError from '../middleware/appError.js';
 // @desc    Fetch all cabins
 // @route   GET /api/cabins
 // @access  Public
-export const getCabins = asyncHandler(async (req, res) => {
+export const getCabins = asyncHandler(async (req, res, next) => {
     const cabins = await Cabin.find({});
     res.status(200).json(cabins);
 })
@@ -14,7 +14,7 @@ export const getCabins = asyncHandler(async (req, res) => {
 // // @desc    Delete a cabin
 // // @route   DELETE /api/cabins/:id
 // // @access  Private/Admin
-export const deleteCabin = asyncHandler(async (req, res) => {
+export const deleteCabin = asyncHandler(async (req, res, next) => {
     const cabin = await Cabin.findById(req.params.id);
 
     if (cabin) {
@@ -30,7 +30,7 @@ export const deleteCabin = asyncHandler(async (req, res) => {
 // @desc    Fetch single cabin
 // @route   GET /api/cabins/:id
 // @access  Public
-export const getCabinById = asyncHandler(async (req, res) => {
+export const getCabinById = asyncHandler(async (req, res, next) => {
     const cabin = await Cabin.findById(req.params.id);
 
     if (cabin) {
@@ -45,7 +45,7 @@ export const getCabinById = asyncHandler(async (req, res) => {
 // // @desc    Create a cabin
 // // @route   POST /api/cabins
 // // @access  Private/Admin
-export const createCabin = asyncHandler(async (req, res) => {
+export const createCabin = asyncHandler(async (req, res, next) => {
     const cabin = new Cabin({
         name: `Sample name ${[...Array(4)].map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('')}`,
         // user: req.user._id,
@@ -72,7 +72,7 @@ export const createCabin = asyncHandler(async (req, res) => {
 // @desc    Update a cabin
 // @route   PUT /api/cabins/:id
 // @access  Private/Admin
-export const updateCabin = asyncHandler(async (req, res) => {
+export const updateCabin = asyncHandler(async (req, res, next) => {
     const { name, maxCapacity, regularPrice, discount, image, description } =
         req.body;
 

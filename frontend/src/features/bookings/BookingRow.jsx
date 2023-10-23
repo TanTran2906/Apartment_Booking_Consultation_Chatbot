@@ -24,6 +24,7 @@ import CheckoutButton from "../check-in-out/CheckoutButton";
 import {
     useGetBookingsQuery,
     useUpdateCheckOutBookingMutation,
+    useDeleteBookingMutation,
 } from "../../slices/bookingSlice";
 import { toast } from "react-hot-toast";
 
@@ -73,16 +74,16 @@ function BookingRow({ booking }) {
         startDate,
         endDate,
         numNights,
-        numGuests,
+        // numGuests,
         totalPrice,
         status,
         user: { fullName: guestName, email },
         cabin: {
             name: cabinName,
-            regularPrice: regularPriceForCabin,
-            discount: discountForCabin,
+            // regularPrice: regularPriceForCabin,
+            // discount: discountForCabin,
         },
-        services,
+        // services,
     } = booking;
 
     const navigate = useNavigate();
@@ -90,7 +91,8 @@ function BookingRow({ booking }) {
     const { refetch } = useGetBookingsQuery();
     const [updateCheckOutBooking, { isLoading: isUpdating }] =
         useUpdateCheckOutBookingMutation();
-    // const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
+    const [deleteBooking, { isLoading: isDeleting }] =
+        useDeleteBookingMutation();
 
     const statusToTagName = {
         unconfirmed: "blue",
@@ -101,6 +103,13 @@ function BookingRow({ booking }) {
     async function handleCheckOut() {
         await updateCheckOutBooking(bookingId);
         toast.success(`Booking successfully checked out`);
+        refetch();
+        // navigate("/admin/bookings");
+    }
+
+    async function handleDelete() {
+        await deleteBooking(bookingId);
+        toast.success(`Booking successfully deleted`);
         refetch();
         // navigate("/admin/bookings");
     }
@@ -131,39 +140,57 @@ function BookingRow({ booking }) {
 
             <Amount>{formatCurrency(totalPrice)}</Amount>
 
-            <Menus.Menu>
-                <Menus.Toggle id={bookingId} />
+            <Modal>
+                <Menus.Menu>
+                    <Menus.Toggle id={bookingId} />
 
-                <Menus.List id={bookingId}>
-                    <Menus.Button
-                        icon={<HiEye />}
-                        onClick={() => navigate(`/admin/bookings/${bookingId}`)}
-                    >
-                        See details
-                    </Menus.Button>
-
-                    {status === "unconfirmed" && (
+                    <Menus.List id={bookingId}>
                         <Menus.Button
-                            icon={<HiArrowDownOnSquare />}
+                            icon={<HiEye />}
                             onClick={() =>
-                                navigate(`/admin/checkin/${bookingId}`)
+                                navigate(`/admin/bookings/${bookingId}`)
                             }
                         >
-                            Check in
+                            See details
                         </Menus.Button>
-                    )}
 
-                    {status === "checked-in" && (
-                        <Menus.Button
-                            onClick={handleCheckOut}
-                            disabled={isUpdating}
-                            icon={<HiArrowUpOnSquare />}
-                        >
-                            Check out
-                        </Menus.Button>
-                    )}
-                </Menus.List>
-            </Menus.Menu>
+                        {status === "unconfirmed" && (
+                            <Menus.Button
+                                icon={<HiArrowDownOnSquare />}
+                                onClick={() =>
+                                    navigate(`/admin/checkin/${bookingId}`)
+                                }
+                            >
+                                Check in
+                            </Menus.Button>
+                        )}
+
+                        {status === "checked-in" && (
+                            <Menus.Button
+                                onClick={handleCheckOut}
+                                disabled={isUpdating}
+                                icon={<HiArrowUpOnSquare />}
+                            >
+                                Check out
+                            </Menus.Button>
+                        )}
+
+                        <Modal.Open opens="delete">
+                            <Menus.Button icon={<HiTrash />}>
+                                Delete booking
+                            </Menus.Button>
+                        </Modal.Open>
+                    </Menus.List>
+                </Menus.Menu>
+
+                <Modal.Window name="delete">
+                    <ConfirmDelete
+                        resourceName="booking"
+                        onConfirm={handleDelete}
+                        disabled={isDeleting}
+                    />
+                </Modal.Window>
+            </Modal>
 
             {/* <Modal>
                 <Menus.Menu>
