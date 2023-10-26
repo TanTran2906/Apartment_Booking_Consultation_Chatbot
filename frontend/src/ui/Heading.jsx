@@ -35,6 +35,14 @@ const Heading = styled.h1`
             text-align: center;
         `}
     
+    ${(props) =>
+        props.as === "register" &&
+        css`
+            font-size: 3rem;
+            font-weight: 600;
+            text-align: end;
+        `}
+    
   line-height: 1.4;
 `;
 

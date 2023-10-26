@@ -60,6 +60,7 @@ const logoutUser = (req, res) => {
 // @access  Public
 const registerUser = asyncHandler(async (req, res, next) => {
     const { fullName, nationalID, nationality, countryFlag, email, password } = req.body;
+    console.log(req.body)
 
     const userExists = await User.findOne({ email });
 

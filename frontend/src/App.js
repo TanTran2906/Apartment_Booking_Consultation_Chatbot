@@ -17,6 +17,8 @@ import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
 import Checkin from './pages/Checkin'
 import Services from "./pages/Services";
+import Signup from "./pages/Register";
+import AdminRoute from "./features/authentication/AdminRoute";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -35,30 +37,33 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
-            <Route
-              index
-              element={<Navigate replace to="admin/dashboard" />}
-            />
-            <Route path="admin/dashboard" element={<Dashboard />} />
-            <Route path="admin/bookings" element={<Bookings />} />
-            <Route
-              path="admin/bookings/:bookingId"
-              element={<Booking />}
-            />
-            <Route
-              path="admin/checkin/:bookingId"
-              element={<Checkin />}
-            />
+          <Route path='' element={<AdminRoute />}>
+            <Route element={<AppLayout />}>
+              <Route
+                index
+                element={<Navigate replace to="admin/dashboard" />}
+              />
+              <Route path="admin/dashboard" element={<Dashboard />} />
+              <Route path="admin/bookings" element={<Bookings />} />
+              <Route
+                path="admin/bookings/:bookingId"
+                element={<Booking />}
+              />
+              <Route
+                path="admin/checkin/:bookingId"
+                element={<Checkin />}
+              />
 
 
-            <Route path="admin/cabins" element={<Cabins />} />
-            <Route path="admin/users" element={<Users />} />
-            <Route path="admin/services" element={<Services />} />
-            <Route path="admin/account" element={<Account />} />
+              <Route path="admin/cabins" element={<Cabins />} />
+              <Route path="admin/users" element={<Users />} />
+              <Route path="admin/services" element={<Services />} />
+              <Route path="admin/account" element={<Account />} />
+            </Route>
           </Route>
 
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Signup />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
