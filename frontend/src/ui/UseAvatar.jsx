@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 // import { useUser } from "./useUser";
 
@@ -24,18 +25,19 @@ const Avatar = styled.img`
 
 function UserAvatar() {
     const { userInfo } = useSelector((state) => state.auth);
-    console.log(userInfo);
 
     const { fullName, photo } = userInfo;
 
     return (
-        <StyledUserAvatar>
-            <Avatar
-                src={photo || "/default-user.jpg"}
-                alt={`Avatar of ${fullName}`}
-            />
-            <span>{fullName}</span>
-        </StyledUserAvatar>
+        <Link to="admin/account">
+            <StyledUserAvatar>
+                <Avatar
+                    src={photo || "/default-user.jpg"}
+                    alt={`Avatar of ${fullName}`}
+                />
+                <span>{fullName}</span>
+            </StyledUserAvatar>
+        </Link>
     );
 }
 

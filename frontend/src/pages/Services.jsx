@@ -11,7 +11,7 @@ import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import ServiceTableOperations from "../features/services/ServiceTableOperations";
 
-function Cabins() {
+function Services() {
     const { refetch } = useGetServicesQuery();
     const [createService, { isLoading: isCreating }] =
         useCreateServiceMutation();
@@ -51,4 +51,4 @@ function Cabins() {
     );
 }
 
-export default Cabins;
+export default Services;

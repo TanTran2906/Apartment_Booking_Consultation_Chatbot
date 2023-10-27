@@ -1,71 +1,94 @@
-import { useForm } from 'react-hook-form';
-import Button from 'ui/Button';
-import Form from 'ui/Form';
-import FormRow from 'ui/FormRow';
-import Input from 'ui/Input';
-import { useUpdateUser } from './useUpdateUser';
+import { useForm } from "react-hook-form";
+import Button from "../../ui/Button";
+import Form from "../../ui/Form";
+import FormRow from "../../ui/FormRow";
+import Input from "../../ui/Input";
+import { useProfileMutation } from "../../slices/userSlice";
+import toast from "react-hot-toast";
+import { setCredentials } from "../../slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+// import { useUpdateUser } from './useUpdateUser';
 
 function UpdatePasswordForm() {
-  const { register, handleSubmit, formState, getValues, reset } = useForm();
-  const { errors } = formState;
+    const { register, handleSubmit, formState, getValues, reset } = useForm();
+    const { errors } = formState;
 
-  const { mutate: updateUser, isLoading: isUpdating } = useUpdateUser();
+    const [profile, { isLoading: isUpdating }] = useProfileMutation();
+    const dispatch = useDispatch();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: () => reset() });
-  }
+    const { userInfo } = useSelector((state) => state.auth);
 
-  function handleReset(e) {
-    // e.preventDefault();
-    reset();
-  }
+    async function onSubmit(data) {
+        try {
+            const res = await profile({
+                _id: userInfo._id,
+                ...data,
+            });
+            console.log(res);
 
-  return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow
-        label='Password (min 8 characters)'
-        error={errors?.password?.message}
-      >
-        <Input
-          type='password'
-          id='password'
-          // this makes the form better for password managers
-          autoComplete='current-password'
-          disabled={isUpdating}
-          {...register('password', {
-            required: 'This field is required',
-            minLength: {
-              value: 8,
-              message: 'Password needs a minimum of 8 characters',
-            },
-          })}
-        />
-      </FormRow>
+            dispatch(setCredentials({ ...res }));
+            toast.success("Password successfully updated");
 
-      <FormRow
-        label='Confirm password'
-        error={errors?.passwordConfirm?.message}
-      >
-        <Input
-          type='password'
-          autoComplete='new-password'
-          id='passwordConfirm'
-          disabled={isUpdating}
-          {...register('passwordConfirm', {
-            required: 'This field is required',
-            validate: (value) =>
-              getValues().password === value || 'Passwords need to match',
-          })}
-        />
-      </FormRow>
-      <FormRow>
-        <Button onClick={handleReset} type='reset' variation='secondary'>
-          Cancel
-        </Button>
-        <Button disabled={isUpdating}>Update password</Button>
-      </FormRow>
-    </Form>
-  );
+            reset();
+        } catch (err) {
+            toast.error(err?.data?.message || err.error);
+        }
+    }
+
+    function handleReset() {
+        reset();
+    }
+
+    return (
+        <Form onSubmit={handleSubmit(onSubmit)}>
+            <FormRow
+                label="Password (min 8 characters)"
+                error={errors?.password?.message}
+            >
+                <Input
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    disabled={isUpdating}
+                    {...register("password", {
+                        required: "This field is required",
+                        minLength: {
+                            value: 8,
+                            message: "Password needs a minimum of 8 characters",
+                        },
+                    })}
+                />
+            </FormRow>
+
+            <FormRow
+                label="Confirm password"
+                error={errors?.passwordConfirm?.message}
+            >
+                <Input
+                    type="password"
+                    autoComplete="new-password"
+                    id="passwordConfirm"
+                    disabled={isUpdating}
+                    {...register("passwordConfirm", {
+                        required: "This field is required",
+                        validate: (value) =>
+                            getValues().password === value ||
+                            "Passwords need to match",
+                    })}
+                />
+            </FormRow>
+            <FormRow>
+                <Button
+                    onClick={handleReset}
+                    type="reset"
+                    variation="secondary"
+                >
+                    Cancel
+                </Button>
+                <Button disabled={isUpdating}>Update password</Button>
+            </FormRow>
+        </Form>
+    );
 }
 
 export default UpdatePasswordForm;

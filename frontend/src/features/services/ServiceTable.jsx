@@ -28,7 +28,7 @@ import { useSearchParams } from "react-router-dom";
 //     padding: 1.6rem 2.4rem;
 // `;
 
-function CabinTable() {
+function ServiceTable() {
     const { data: services, isLoading, error, refetch } = useGetServicesQuery();
     const [searchParams] = useSearchParams();
 
@@ -103,4 +103,4 @@ function CabinTable() {
     );
 }
 
-export default CabinTable;
+export default ServiceTable;

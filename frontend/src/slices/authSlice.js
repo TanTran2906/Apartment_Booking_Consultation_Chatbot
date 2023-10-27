@@ -12,7 +12,6 @@ const authSlice = createSlice({
     reducers: {
         //setCredentials: thiết lập thông tin đăng nhập
         setCredentials: (state, action) => {
-            console.log(action.payload)
             state.userInfo = action.payload;
             localStorage.setItem('userInfo', JSON.stringify(action.payload));
         },

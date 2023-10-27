@@ -19,6 +19,7 @@ import Checkin from './pages/Checkin'
 import Services from "./pages/Services";
 import Signup from "./pages/Register";
 import AdminRoute from "./features/authentication/AdminRoute";
+import { DarkModeProvider } from "./context/DarkModeContext";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -32,64 +33,67 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <GlobalStyles />
-      <BrowserRouter>
-        <Routes>
-          <Route path='' element={<AdminRoute />}>
-            <Route element={<AppLayout />}>
-              <Route
-                index
-                element={<Navigate replace to="admin/dashboard" />}
-              />
-              <Route path="admin/dashboard" element={<Dashboard />} />
-              <Route path="admin/bookings" element={<Bookings />} />
-              <Route
-                path="admin/bookings/:bookingId"
-                element={<Booking />}
-              />
-              <Route
-                path="admin/checkin/:bookingId"
-                element={<Checkin />}
-              />
+    <DarkModeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <GlobalStyles />
+        <BrowserRouter>
+          <Routes>
+            <Route path='' element={<AdminRoute />}>
+              <Route element={<AppLayout />}>
+                <Route
+                  index
+                  element={<Navigate replace to="admin/dashboard" />}
+                />
+                <Route path="admin/dashboard" element={<Dashboard />} />
+                <Route path="admin/bookings" element={<Bookings />} />
+                <Route
+                  path="admin/bookings/:bookingId"
+                  element={<Booking />}
+                />
+                <Route
+                  path="admin/checkin/:bookingId"
+                  element={<Checkin />}
+                />
 
 
-              <Route path="admin/cabins" element={<Cabins />} />
-              <Route path="admin/users" element={<Users />} />
-              <Route path="admin/services" element={<Services />} />
-              <Route path="admin/account" element={<Account />} />
+                <Route path="admin/cabins" element={<Cabins />} />
+                <Route path="admin/users" element={<Users />} />
+                <Route path="admin/services" element={<Services />} />
+                <Route path="admin/account" element={<Account />} />
+              </Route>
             </Route>
-          </Route>
 
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Signup />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Signup />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
 
-      <Toaster
-        position="top-center"
-        gutter={12}
-        containerStyle={{ margin: "8px" }}
-        toastOptions={{
-          success: {
-            duration: 3000,
-          },
-          error: {
-            duration: 5000,
-          },
-          style: {
-            fontSize: "16px",
-            maxWidth: "500px",
-            padding: "16px 24px",
-            backgroundColor: "var(--color-grey-0)",
-            color: "var(--color-grey-700)",
-          },
-        }}
-      />
+        <Toaster
+          position="top-center"
+          gutter={12}
+          containerStyle={{ margin: "8px" }}
+          toastOptions={{
+            success: {
+              duration: 3000,
+            },
+            error: {
+              duration: 5000,
+            },
+            style: {
+              fontSize: "16px",
+              maxWidth: "500px",
+              padding: "16px 24px",
+              backgroundColor: "var(--color-grey-0)",
+              color: "var(--color-grey-700)",
+            },
+          }}
+        />
 
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </DarkModeProvider>
+
   );
 }
 

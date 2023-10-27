@@ -33,7 +33,7 @@ const authUser = asyncHandler(async (req, res, next) => {
             nationalID: user.nationalID,
             nationality: user.nationality,
             countryFlag: user.countryFlag,
-            // photo: user.photo,
+            photo: user?.photo,
             email: user.email,
             isAdmin: user.isAdmin,
         });
@@ -110,7 +110,7 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
             nationalID: user.nationalID,
             nationality: user.nationality,
             countryFlag: user.countryFlag,
-            // photo: user.photo,
+            photo: user?.photo,
             email: user.email,
             isAdmin: user.isAdmin,
         });
@@ -123,16 +123,31 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
+const updateUserProfile = asyncHandler(async (req, res, next) => {
+    const { _id, fullName, email, photo, nationalID } =
+        req.body;
+
+    const user = await User.findById(_id);
 
     if (user) {
-        user.fullName = req.body.fullName || user.fullName;
-        user.email = req.body.email || user.email;
-        user.nationalID = req.body.nationalID || user.nationalID
-        // user.photo = req.body.photo || user.photo
+        if (req.body.fullName !== undefined) {
+            user.fullName = fullName;
+        }
 
-        if (req.body.password) {
+        if (req.body.email !== undefined) {
+            user.email = email;
+        }
+
+        if (req.body.nationalID !== undefined) {
+            user.nationalID = nationalID;
+        }
+
+        // Nếu có image mới được cung cấp, thì cập nhật image
+        if (req.body.photo) {
+            user.photo = `${photo.replace(/\\/g, '/')}`;
+        }
+
+        if (req.body.password !== undefined) {
             user.password = req.body.password;
         }
 
@@ -144,7 +159,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             nationalID: updatedUser.nationalID,
             nationality: updatedUser.nationality,
             countryFlag: updatedUser.countryFlag,
-            // photo: updatedUser.photo,
+            photo: updatedUser.photo,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
         });
@@ -157,29 +172,71 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
-const getUsers = asyncHandler(async (req, res, next) => {
-    res.send('get users');
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
 });
-
 // @desc    Delete user
-// @route   DELETE /api/users/:id
+// @route   PATCH /api/users/:id
 // @access  Private/Admin
-const deleteUser = asyncHandler(async (req, res, next) => {
-    res.send('delete user');
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    console.log(user)
+
+    if (user) {
+        if (user.isAdmin) {
+            res.status(400);
+            throw new Error('Can not delete admin user');
+        }
+        user.active = false;
+
+        const updatedUser = await user.save();
+
+        res.json({ message: 'User isn\'t actived' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
-const getUserById = asyncHandler(async (req, res, next) => {
-    res.send('get user by id');
-});
+const getUserById = asyncHandler(async (req, res) => {
 
+    const user = await User.findById(req.params.id).select('-password');
+
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @access  Private/Admin
-const updateUser = asyncHandler(async (req, res, next) => {
-    res.send('update user');
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        user.fullName = req.body.fullName || user.fullName;
+        user.nationalID = req.body.nationalID || user.nationalID;
+
+        const updatedUser = await user.save();
+
+        res.json({
+            _id: updatedUser._id,
+            fullName: updatedUser.fullName,
+            nationalID: updateUser.nationalID,
+            isAdmin: updateUser.isAdmin,
+            active: updateUser.active
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 export {

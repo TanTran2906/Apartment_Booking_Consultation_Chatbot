@@ -119,7 +119,7 @@ function CreateServiceForm({ serviceToEdit, onCloseModal }) {
     return (
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
             <FormRow>
-                <Label htmlFor="name">Cabin name</Label>
+                <Label htmlFor="name">Service name</Label>
                 <Input
                     type="text"
                     id="name"
