@@ -5,6 +5,7 @@ import Booking from '../models/bookingModel.js';
 import Cabin from '../models/cabinModel.js';
 import User from '../models/userModel.js'
 import Service from '../models/serviceModel.js'
+import { getToday } from '../utils/getToday.js';
 
 
 // @desc    Get all bookings
@@ -116,5 +117,60 @@ export const deleteBooking = asyncHandler(async (req, res, next) => {
         });
     } else {
         return next(new AppError('No booking found with that ID', 404))
+    }
+});
+
+//=========================== STATISTICS ===========================//
+export const getBookingsAfterDate = asyncHandler(async (req, res, next) => {
+    const { date } = req.params;
+
+    if (!date) {
+        return next(new AppError('Date parameter is required.', 400));
+    }
+
+    const endDate = getToday({ end: true });
+
+    const bookings = await Booking.find({
+        bookingDate: {
+            $gte: new Date(date),
+            $lte: endDate,
+        },
+    });
+
+
+    if (bookings) {
+        res.status(200).json(bookings);
+
+    } else {
+        return next(new AppError('Bookings could not be loaded', 500));
+    }
+});
+
+export const getStaysAfterDate = asyncHandler(async (req, res, next) => {
+    try {
+        const { date } = req.params;
+
+        if (!date) {
+            return next(new AppError('Date parameter is required.', 400));
+        }
+
+        const endDate = getToday();
+
+        const bookings = await Booking.find({
+            startDate: {
+                $gte: new Date(date),
+                $lte: endDate,
+            },
+        });
+
+        if (bookings) {
+            res.status(200).json(bookings);
+
+        } else {
+            return next(new AppError('Bookings could not be loaded', 500));
+        }
+    }
+    catch (err) {
+        return next(new AppError(err, 500));
     }
 });
