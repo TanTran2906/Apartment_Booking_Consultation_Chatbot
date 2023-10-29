@@ -176,3 +176,24 @@ export const getStaysAfterDate = asyncHandler(async (req, res, next) => {
         return next(new AppError(err, 500));
     }
 });
+
+export const getTodayActivitys = asyncHandler(async (req, res, next) => {
+    const today = getToday();
+
+    // Lấy danh sách các booking thỏa mãn điều kiện
+    const bookings = await Booking.find({
+        $or: [
+            { $and: [{ status: 'unconfirmed' }, { startDate: today }] },
+            { $and: [{ status: 'checked-in' }, { endDate: today }] },
+        ],
+    })
+        .sort('bookingDate').populate('user');
+
+    if (bookings) {
+        res.status(200).json(bookings);
+
+    } else {
+        return next(new AppError('Bookings could not be loaded', 500));
+    }
+
+})

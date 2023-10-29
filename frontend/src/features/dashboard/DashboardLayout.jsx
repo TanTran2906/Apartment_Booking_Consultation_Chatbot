@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
-// import DurationChart from "../../features/dashboard/DurationChart";
+import DurationChart from "../../features/dashboard/DurationChart";
 import SalesChart from "./SalesChart";
 import Stats from "./Stats";
-// import TodayActivity from "../../features/check-in-out/TodayActivity";
+import TodayActivity from "../../features/check-in-out/TodayActivity";
 import { useRecentBookings } from "./useRecentBookings";
 import Spinner from "../../ui/Spinner";
 import { useRecentStays } from "./useRecentStays";
 import { useGetCabinsQuery } from "../../slices/cabinSlice";
-import { useGetBookingDetailsQuery } from "../../slices/bookingSlice";
 
 const StyledDashboardLayout = styled.div`
     display: grid;
@@ -38,8 +37,9 @@ function DashboardLayout() {
                 numDays={numDays}
                 cabinCount={cabins?.length}
             />
-            {/* <TodayActivity /> */}
-            {/* <DurationChart confirmedStays={confirmedStays} /> */}
+            {/* Liệt kê tất cả các khách đến khách sạn để nhận phòng hoặc trả phòng vào ngày hiện tại  */}
+            <TodayActivity />
+            <DurationChart confirmedStays={confirmedStays} />
             <SalesChart bookings={bookings} numDays={numDays} />
         </StyledDashboardLayout>
     );

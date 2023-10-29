@@ -48,10 +48,15 @@ export const bookingSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Booking'],
         }),
-
+        getTodayActivitys: builder.query({
+            query: () => ({
+                url: `${BOOKINGS_URL}/getTodayActivitys`,
+            }),
+            providesTags: ['Booking'],
+        }),
     }),
 })
 
 export const { useGetBookingsQuery, useGetBookingDetailsQuery, useUpdateCheckinBookingMutation,
     useUpdateCheckOutBookingMutation, useDeleteBookingMutation, useGetBookingsAfterDateQuery,
-    useGetStaysAfterDateQuery } = bookingSlice
+    useGetStaysAfterDateQuery, useGetTodayActivitysQuery } = bookingSlice
