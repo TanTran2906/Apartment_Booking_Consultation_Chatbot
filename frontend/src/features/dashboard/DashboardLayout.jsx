@@ -1,21 +1,14 @@
 import styled from "styled-components";
 
 // import DurationChart from "../../features/dashboard/DurationChart";
-// import SalesChart from "../../features/dashboard/SalesChart";
-import Stats from "../../features/dashboard/Stats";
+import SalesChart from "./SalesChart";
+import Stats from "./Stats";
 // import TodayActivity from "../../features/check-in-out/TodayActivity";
 import { useRecentBookings } from "./useRecentBookings";
 import Spinner from "../../ui/Spinner";
-import { subDays } from "date-fns";
-import { useSearchParams } from "react-router-dom";
-import {
-    useGetBookingsAfterDateQuery,
-    useGetBookingsQuery,
-} from "../../slices/bookingSlice";
-import { useState } from "react";
-import { useEffect } from "react";
-// import { useRecentStays } from './useRecentStays';
-// import { useCabins } from 'features/cabins/useCabins';
+import { useRecentStays } from "./useRecentStays";
+import { useGetCabinsQuery } from "../../slices/cabinSlice";
+import { useGetBookingDetailsQuery } from "../../slices/bookingSlice";
 
 const StyledDashboardLayout = styled.div`
     display: grid;
@@ -25,35 +18,29 @@ const StyledDashboardLayout = styled.div`
 `;
 
 function DashboardLayout() {
+    const { data: cabins, isLoading } = useGetCabinsQuery();
+
     const {
         data: bookings,
         isLoading: isLoading1,
         numDays,
-        error,
     } = useRecentBookings();
-    console.log(bookings, numDays, error);
 
-    // const { isLoading: isLoading2, confirmedStays } = useRecentStays();
-    // const { isLoading: isLoading3, cabins } = useCabins();
+    const { confirmedStays, isLoading: isLoading2 } = useRecentStays();
 
-    // if (
-    //     isLoading1
-    //     // || isLoading2 || isLoading3
-    // )
-    //     return <Spinner />;
+    if (isLoading1 || isLoading2 || isLoading) return <Spinner />;
 
     return (
         <StyledDashboardLayout>
-            Hello
-            {/* <Stats
-                // bookings={bookings}
-                // confirmedStays={confirmedStays}
+            <Stats
+                bookings={bookings}
+                confirmedStays={confirmedStays}
                 numDays={numDays}
-                // cabinCount={cabins.length}
-            /> */}
+                cabinCount={cabins?.length}
+            />
             {/* <TodayActivity /> */}
             {/* <DurationChart confirmedStays={confirmedStays} /> */}
-            {/* <SalesChart bookings={bookings} numDays={numDays} /> */}
+            <SalesChart bookings={bookings} numDays={numDays} />
         </StyledDashboardLayout>
     );
 }

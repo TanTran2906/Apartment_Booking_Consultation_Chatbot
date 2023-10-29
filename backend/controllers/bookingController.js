@@ -28,6 +28,7 @@ export const getBookings = asyncHandler(async (req, res, next) => {
             select: 'name regularPrice discount', // Chỉ lấy trường 'fullName' và 'email' của user
 
         });
+
     if (bookings) {
         res.status(200).json(bookings);
     }
@@ -132,19 +133,19 @@ export const getBookingsAfterDate = asyncHandler(async (req, res, next) => {
 
     const bookings = await Booking.find({
         bookingDate: {
-            $gte: new Date(date),
+            $gte: date,
             $lte: endDate,
         },
-    });
+    }).populate('services');
 
 
     if (bookings) {
         res.status(200).json(bookings);
-
-    } else {
-        return next(new AppError('Bookings could not be loaded', 500));
     }
+    else return next(new AppError('Bookings could not be loaded', 500));
+
 });
+
 
 export const getStaysAfterDate = asyncHandler(async (req, res, next) => {
     try {
@@ -161,7 +162,8 @@ export const getStaysAfterDate = asyncHandler(async (req, res, next) => {
                 $gte: new Date(date),
                 $lte: endDate,
             },
-        });
+        }).populate('services');
+
 
         if (bookings) {
             res.status(200).json(bookings);

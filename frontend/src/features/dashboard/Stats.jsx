@@ -15,13 +15,12 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
     const sales = bookings.reduce((acc, cur) => acc + cur.totalPrice, 0);
 
     // Stat 3)
-    // const checkins = confirmedStays.length;
+    const checkins = confirmedStays.length;
 
-    // Stat 4)
-    // We will use a trick to calculate occupancy rate. It's not 100% accurate, but we want to keep it simple. We know we can have a total of 'numDays * cabinCount' days to occupy, and we also know how many days were actually booked. From this, we can compute the percentage
-    // const occupation =
-    //   confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
-    //   (numDays * cabinCount);
+    // Stat 4) Tỉ lệ chiếm đóng(căn hộ được sử dụng) giữa số ngày đã stay(check-in or check-out) / tổng số ngày có sẵn (numDays * cabinCount) => trong khoảng thời gian đã cho, chỉ có khoảng X% các căn hộ đã được sử dụng.
+    const occupation =
+        confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
+        (numDays * cabinCount);
 
     return (
         <>
@@ -37,18 +36,18 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
                 value={formatCurrency(sales)}
                 color="green"
             />
-            {/* <Stat
+            <Stat
                 icon={<HiOutlineCalendarDays />}
                 title="Check ins"
-                // value={checkins}
+                value={checkins}
                 color="indigo"
             />
             <Stat
                 icon={<HiOutlineChartBar />}
                 title="Occupancy rate"
-                // value={Math.round(occupation * 100) + '%'}
+                value={Math.round(occupation * 100) + "%"}
                 color="yellow"
-            /> */}
+            />
         </>
     );
 }
