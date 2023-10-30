@@ -5,7 +5,8 @@ import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
 import Spinner from "../../ui/Spinner";
 import TodayItem from "../dashboard/TodayItem";
-import { useGetTodayActivitysQuery } from "../../slices/bookingSlice";
+import { useGetActivitiesQuery } from "../../slices/bookingSlice";
+import { getToday } from "../../utils/helpers";
 
 const StyledToday = styled.div`
     padding: 3.2rem;
@@ -35,8 +36,10 @@ const NoActivity = styled.p`
     margin-top: 0.8rem;
 `;
 
+const today = getToday();
+
 function Today() {
-    const { data: stays, isLoading } = useGetTodayActivitysQuery();
+    const { data: stays, isLoading } = useGetActivitiesQuery(today);
 
     return (
         <StyledToday>
@@ -49,7 +52,7 @@ function Today() {
                 stays?.length > 0 ? (
                     <TodayList>
                         {stays.map((stay) => (
-                            <TodayItem key={stay.id} stay={stay} />
+                            <TodayItem key={stay._id} stay={stay} />
                         ))}
                     </TodayList>
                 ) : (

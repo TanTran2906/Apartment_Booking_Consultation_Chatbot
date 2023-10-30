@@ -22,6 +22,9 @@ import {
     useUpdateCheckinBookingMutation,
 } from "../../slices/bookingSlice";
 
+import React, { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+// import { ComponentToPrint } from "./ComponentToPrint";
 // import { useGetServicesQuery } from "../../slices/serviceSlice";
 
 const Box = styled.div`
@@ -30,12 +33,18 @@ const Box = styled.div`
     padding: 2.4rem 4rem;
 `;
 
+const ComponentToPrint = styled.div``;
+
 function CheckinBooking() {
     const { bookingId } = useParams();
     const moveBack = useMoveBack();
     const navigate = useNavigate();
+    const componentRef = useRef();
 
     const [confirmPaid, setConfirmPaid] = useState(false);
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
     // const [addService, setAddService] = useState(false);
 
     // const { data: servicesData, isLoading: isLoadingServices } =
@@ -61,6 +70,7 @@ function CheckinBooking() {
         toast.success(`Booking successfully checked in`);
         refetch();
         navigate("/admin/bookings");
+        handlePrint();
     }
 
     // const optionalBreakfastPrice =
@@ -84,24 +94,26 @@ function CheckinBooking() {
     // We return a fragment so that these elements fit into the page's layout
     return (
         <>
-            <Row type="horizontal">
-                <Heading type="h1">Check in booking #{bookingId}</Heading>
-                <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
-            </Row>
+            <ComponentToPrint ref={componentRef}>
+                <Row type="horizontal">
+                    <Heading type="h1">Check in booking #{bookingId}</Heading>
+                    {/* <ButtonText onClick={moveBack}>&larr; Back</ButtonText> */}
+                </Row>
 
-            <BookingDataBox booking={booking} />
+                <BookingDataBox booking={booking} />
 
-            <Box>
-                <Checkbox
-                    checked={confirmPaid}
-                    disabled={confirmPaid || isUpdating}
-                    onChange={() => setConfirmPaid((confirm) => !confirm)}
-                    id="confirm"
-                >
-                    I confirm that {user.fullName} has paid the total amount of{" "}
-                    {formatCurrency(totalPrice)}
-                </Checkbox>
-            </Box>
+                <Box>
+                    <Checkbox
+                        checked={confirmPaid}
+                        disabled={confirmPaid || isUpdating}
+                        onChange={() => setConfirmPaid((confirm) => !confirm)}
+                        id="confirm"
+                    >
+                        I confirm that {user.fullName} has paid the total amount
+                        of {formatCurrency(totalPrice)}
+                    </Checkbox>
+                </Box>
+            </ComponentToPrint>
 
             {/* LATER */}
             {/* {!hasService &&

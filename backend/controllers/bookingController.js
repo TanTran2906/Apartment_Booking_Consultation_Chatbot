@@ -27,7 +27,7 @@ export const getBookings = asyncHandler(async (req, res, next) => {
             path: 'services',
             select: 'name regularPrice discount', // Chỉ lấy trường 'fullName' và 'email' của user
 
-        });
+        }).sort('updateAt');
 
     if (bookings) {
         res.status(200).json(bookings);
@@ -133,7 +133,7 @@ export const getBookingsAfterDate = asyncHandler(async (req, res, next) => {
 
     const bookings = await Booking.find({
         bookingDate: {
-            $gte: date,
+            $gte: new Date(date),
             $lte: endDate,
         },
     }).populate('services');
@@ -177,17 +177,21 @@ export const getStaysAfterDate = asyncHandler(async (req, res, next) => {
     }
 });
 
-export const getTodayActivitys = asyncHandler(async (req, res, next) => {
-    const today = getToday();
+export const getTodayActivities = asyncHandler(async (req, res, next) => {
+    const { date } = req.params;
+
+    if (!date) {
+        return next(new AppError('Date parameter is required.', 400));
+    }
 
     // Lấy danh sách các booking thỏa mãn điều kiện
     const bookings = await Booking.find({
         $or: [
-            { $and: [{ status: 'unconfirmed' }, { startDate: today }] },
-            { $and: [{ status: 'checked-in' }, { endDate: today }] },
+            { $and: [{ status: 'unconfirmed' }, { startDate: date }] },
+            { $and: [{ status: 'checked-in' }, { endDate: date }] },
         ],
-    })
-        .sort('bookingDate').populate('user');
+    }).sort('bookingDate').populate('user');
+
 
     if (bookings) {
         res.status(200).json(bookings);
@@ -197,3 +201,4 @@ export const getTodayActivitys = asyncHandler(async (req, res, next) => {
     }
 
 })
+

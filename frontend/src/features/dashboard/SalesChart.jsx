@@ -50,7 +50,6 @@ function SalesChart({ bookings, numDays }) {
 
                 // Kiểm tra xem booking.services có dữ liệu không
                 if (booking.services && booking.services.length > 0) {
-                    console.log(booking);
                     salesDataForDate.servicesSales += booking.services.reduce(
                         (total, service) => {
                             return (

@@ -28,7 +28,7 @@ const Guest = styled.div`
 `;
 
 function TodayItem({ stay }) {
-    const { id, status, user, numNights } = stay;
+    const { _id, status, user, numNights } = stay;
 
     const statusToAction = {
         unconfirmed: {
@@ -39,7 +39,7 @@ function TodayItem({ stay }) {
                     variation="primary"
                     size="small"
                     as={Link}
-                    to={`/checkin/${id}`}
+                    to={`/admin/checkin/${_id}`}
                 >
                     Check in
                 </Button>
@@ -48,7 +48,7 @@ function TodayItem({ stay }) {
         "checked-in": {
             action: "departing",
             tag: "blue",
-            button: <CheckoutButton bookingId={id} />,
+            button: <CheckoutButton bookingId={_id} />,
         },
     };
 
