@@ -20,6 +20,7 @@ import Services from "./pages/Services";
 import Signup from "./pages/Register";
 import AdminRoute from "./features/authentication/AdminRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import ClientLayout from "./ui/client/ClientLayout";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -39,6 +40,7 @@ function App() {
         <GlobalStyles />
         <BrowserRouter>
           <Routes>
+            {/* ADMIN PAGE */}
             <Route path='' element={<AdminRoute />}>
               <Route element={<AppLayout />}>
                 <Route
@@ -55,13 +57,18 @@ function App() {
                   path="admin/checkin/:bookingId"
                   element={<Checkin />}
                 />
-
-
                 <Route path="admin/cabins" element={<Cabins />} />
                 <Route path="admin/users" element={<Users />} />
                 <Route path="admin/services" element={<Services />} />
                 <Route path="admin/account" element={<Account />} />
               </Route>
+            </Route>
+
+            {/* CLIENT PAGE */}
+            <Route element={<ClientLayout />}>
+              <Route path="home" element={<ClientLayout />} />
+
+
             </Route>
 
             <Route path="login" element={<Login />} />
