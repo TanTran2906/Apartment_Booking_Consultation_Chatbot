@@ -6,11 +6,16 @@ function Header() {
                 <div className={styles.container}>
                     <div class={styles.header__inner}>
                         {/* <!-- Logo --> */}
-                        <img
-                            src="/logo_dark_transparent.png"
-                            alt="Lucy"
-                            class={styles.logo}
-                        />
+                        <div className={styles.header__logo}>
+                            <img
+                                src="/logo_dark_transparent.png"
+                                alt="Lucy"
+                                class={styles.logo}
+                            />
+                            <p className={styles.header__name}>
+                                The Stella Hotel
+                            </p>
+                        </div>
 
                         {/* <!-- Navbar --> */}
                         <nav class={styles.navbar}>

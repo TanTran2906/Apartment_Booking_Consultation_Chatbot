@@ -70,6 +70,16 @@
     background-color: #fffaf5;
 }
 
+.header__logo {
+    display: flex;
+    align-items: center;
+}
+
+.header__name {
+    font-weight: 800;
+    font-size: 1.8rem;
+}
+
 .header__inner {
     display: flex;
     align-items: center;

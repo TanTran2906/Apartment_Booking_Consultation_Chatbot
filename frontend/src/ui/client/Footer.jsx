@@ -2,55 +2,21 @@ import styles from "../../styles/clientStyles/Footer.module.css";
 function Footer() {
     return (
         <>
-            <footer class="footer">
-                <div class="container">
-                    <div class="footer__inner">
-                        <div class="footer__left">
+            <footer class={styles.footer}>
+                <div class={styles.container}>
+                    <div class={styles.footer__inner}>
+                        <div class={styles.footer__left}>
                             {/* <!-- Logo --> */}
-                            <img src="./assets/img/logo.svg" alt="" />
-
-                            {/* <!-- Subscribe form --> */}
-                            <form action="" class="subscribe-form">
-                                <input
-                                    type="email"
-                                    name=""
-                                    id=""
-                                    placeholder="Enter your email"
-                                    class="subscribe-form__input"
-                                />
-                                <button
-                                    type="submit"
-                                    class="subscribe-form__submit"
-                                >
-                                    <svg
-                                        width="18"
-                                        height="19"
-                                        viewBox="0 0 18 19"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M2.8125 9.00195H15.1875"
-                                            stroke="white"
-                                            stroke-width="1.5"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                        <path
-                                            d="M10.125 3.93945L15.1875 9.00195L10.125 14.0645"
-                                            stroke="white"
-                                            stroke-width="1.5"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </button>
-                            </form>
+                            <img
+                                class={styles.img}
+                                src="/logo_dark_transparent.png"
+                                alt=""
+                            />
 
                             {/* <!-- Social --> */}
-                            <h3 class="footer__heading">Follow Us</h3>
-                            <div class="social-list">
-                                <a href="#!" class="social-item">
+                            <h3 class={styles.footer__heading}>Follow Us</h3>
+                            <div class={styles.social__list}>
+                                <a href="#!" class={styles.social__item}>
                                     <svg
                                         width="14"
                                         height="14"
@@ -65,7 +31,7 @@ function Footer() {
                                         />
                                     </svg>
                                 </a>
-                                <a href="#!" class="social-item">
+                                <a href="#!" class={styles.social__item}>
                                     <svg
                                         width="15"
                                         height="12"
@@ -80,7 +46,7 @@ function Footer() {
                                         />
                                     </svg>
                                 </a>
-                                <a href="#!" class="social-item">
+                                <a href="#!" class={styles.social__item}>
                                     <svg
                                         width="14"
                                         height="14"
@@ -95,7 +61,7 @@ function Footer() {
                                         />
                                     </svg>
                                 </a>
-                                <a href="#!" class="social-item">
+                                <a href="#!" class={styles.social__item}>
                                     <svg
                                         width="14"
                                         height="14"
@@ -115,63 +81,92 @@ function Footer() {
                             </div>
                         </div>
 
-                        <div class="footer__right">
-                            <div class="footer__row">
+                        <div class={styles.footer__right}>
+                            <div class={styles.footer__row}>
                                 {/* <!-- Footer column 1 --> */}
-                                <section class="footer__column">
-                                    <h3 class="footer__heading">Explore</h3>
-                                    <ul class="footer__list">
+                                <section class={styles.footer__column}>
+                                    <h3 class={styles.footer__heading}>
+                                        Explore
+                                    </h3>
+                                    <ul class={styles.footer__list}>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 About Us
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Services
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Our Team
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
-                                                Adopt Pet
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
+                                                Cabins
                                             </a>
                                         </li>
                                     </ul>
                                 </section>
 
                                 {/* <!-- Footer column 2 --> */}
-                                <section class="footer__column">
-                                    <h3 class="footer__heading">
+                                <section class={styles.footer__column}>
+                                    <h3 class={styles.footer__heading}>
                                         Useful links
                                     </h3>
-                                    <ul class="footer__list">
+                                    <ul class={styles.footer__list}>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 FAQs
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Shop
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Privacy Policy
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Terms of Use
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 Site Map
                                             </a>
                                         </li>
@@ -179,23 +174,32 @@ function Footer() {
                                 </section>
 
                                 {/* <!-- Footer column 3 --> */}
-                                <section class="footer__column">
-                                    <h3 class="footer__heading">
-                                        Contact Info
+                                <section class={styles.footer__column}>
+                                    <h3 class={styles.footer__heading}>
+                                        Contact info
                                     </h3>
-                                    <ul class="footer__list">
+                                    <ul class={styles.footer__list}>
                                         <li>
-                                            <a href="#!" class="footer__link">
-                                                abc@gmail.com
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
+                                                admin@test.com
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 0 (800)-000-00-00
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#!" class="footer__link">
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
                                                 New York, NY, Rocawy 7
                                             </a>
                                         </li>
@@ -203,32 +207,25 @@ function Footer() {
                                 </section>
 
                                 {/* <!-- Footer column 4 --> */}
-                                <section class="footer__column">
-                                    <h3 class="footer__heading">
-                                        Opening Time
+                                <section class={styles.footer__column}>
+                                    <h3 class={styles.footer__heading}>
+                                        Opening time
                                     </h3>
-                                    <ul class="footer__list">
+                                    <ul class={styles.footer__list}>
                                         <li>
-                                            <a href="#!" class="footer__link">
-                                                Mon – Fri : 08.00 am – 20.00 pm
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#!" class="footer__link">
-                                                Saturday : 09.00 am – 20.00 pm
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#!" class="footer__link">
-                                                Sunday: We are Closed
+                                            <a
+                                                href="#!"
+                                                class={styles.footer__link}
+                                            >
+                                                Mon – Sun : All days
                                             </a>
                                         </li>
                                     </ul>
                                 </section>
                             </div>
 
-                            <p class="footer__copyright">
-                                Copyright & Design By Uihut
+                            <p class={styles.footer__copyright}>
+                                Copyright & Design By Tan
                             </p>
                         </div>
                     </div>

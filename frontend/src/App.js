@@ -21,6 +21,7 @@ import Signup from "./pages/Register";
 import AdminRoute from "./features/authentication/AdminRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import ClientLayout from "./ui/client/ClientLayout";
+import Homepage from "./pages/client/Homepage";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -43,10 +44,10 @@ function App() {
             {/* ADMIN PAGE */}
             <Route path='' element={<AdminRoute />}>
               <Route element={<AppLayout />}>
-                <Route
+                {/* <Route
                   index
                   element={<Navigate replace to="admin/dashboard" />}
-                />
+                /> */}
                 <Route path="admin/dashboard" element={<Dashboard />} />
                 <Route path="admin/bookings" element={<Bookings />} />
                 <Route
@@ -66,8 +67,11 @@ function App() {
 
             {/* CLIENT PAGE */}
             <Route element={<ClientLayout />}>
-              <Route path="home" element={<ClientLayout />} />
-
+              <Route
+                index
+                element={<Navigate replace to="home" />}
+              />
+              <Route path="home" element={<Homepage />} />
 
             </Route>
 
