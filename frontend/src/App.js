@@ -22,6 +22,7 @@ import AdminRoute from "./features/authentication/AdminRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import ClientLayout from "./ui/client/ClientLayout";
 import Homepage from "./pages/client/Homepage";
+import CabinsToDisplay from "./pages/client/CabinsToDisplay";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -37,7 +38,7 @@ function App() {
   return (
     <DarkModeProvider>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <GlobalStyles />
         <BrowserRouter>
           <Routes>
@@ -72,6 +73,7 @@ function App() {
                 element={<Navigate replace to="home" />}
               />
               <Route path="home" element={<Homepage />} />
+              <Route path="cabins" element={<CabinsToDisplay />} />
 
             </Route>
 

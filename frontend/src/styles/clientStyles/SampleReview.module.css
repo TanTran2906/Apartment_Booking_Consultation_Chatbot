@@ -1,0 +1,183 @@
+/* Review */
+
+.container {
+    width: 1170px;
+    max-width: calc(100% - 48px);
+    margin: 0 auto;
+}
+
+.btn__primary {
+    color: #fff !important;
+    background: #ff5b2e !important;
+    border-color: #ff5b2e !important;
+}
+
+.btn {
+    --height: 56px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 130px;
+    height: var(--height);
+    line-height: var(--height);
+    border: 1px solid rgb(0, 9, 88, 0.7);
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 1.4rem;
+    text-align: center;
+    color: #000958;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+.section__heading {
+    color: #000958;
+    font-size: 5.8rem;
+    font-weight: 700;
+}
+
+.section_desc {
+    margin-top: 24px;
+    font-size: 1.6rem;
+    line-height: 1.88;
+    color: #656689;
+}
+
+.review {
+    padding: 104px 0 52px;
+}
+
+.review__inner {
+    display: flex;
+    align-items: center;
+    column-gap: 44px;
+}
+
+.review__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1.5px solid #ffd1c4;
+    background: transparent;
+    color: #ff5b2e;
+}
+
+.review__control:hover {
+    color: #fff;
+    background: #ff5b2e;
+    border-color: #ff5b2e;
+    cursor: pointer;
+}
+
+.review__control:nth-of-type(2) {
+    margin-left: auto;
+}
+
+.review__list {
+    display: flex;
+}
+
+.review_item {
+    display: flex;
+    align-items: center;
+    column-gap: 115px;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.review_item__media {
+    position: relative;
+    flex-shrink: 0;
+    width: 274px;
+    margin-top: -52px;
+    border-radius: 137px;
+}
+
+.review_item__media::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 82%;
+    background: #ffda54;
+    border-radius: inherit;
+}
+
+.review__content {
+    overflow: hidden;
+}
+
+.review_item__content {
+    margin-top: 28px;
+}
+
+.review_item__img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    border-radius: inherit;
+    object-fit: cover; /* Đảm bảo hình ảnh điền đầy đối tượng không làm méo hoặc căng hình */
+    object-position: center center; /* Canh giữa hình ảnh */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ để tạo sâu thêm */
+}
+
+.review_item__quote {
+    width: 553px;
+    margin-top: 24px;
+    font-size: 2rem;
+    line-height: 1.56;
+    color: #000;
+}
+
+.review_item__author {
+    display: flex;
+    align-items: center;
+    margin-top: 34px;
+    /* font-family: Sora, sans-serif; */
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1;
+    color: #282828;
+}
+
+.review_item__author::before {
+    display: inline-block;
+    content: "";
+    width: 20px;
+    height: 2px;
+    margin-right: 8px;
+    border-radius: 1px;
+    background: #000;
+}
+
+.review__dots {
+    margin-top: 56px;
+    display: flex;
+    justify-content: center;
+    column-gap: 8px;
+}
+
+.review__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    border: 1px solid #ff5b2e;
+}
+
+.review__dot:hover {
+    background: #ff5b2e;
+    cursor: pointer;
+}
+
+.review__dot__active {
+    width: 24px;
+    background: #ff5b2e;
+}
