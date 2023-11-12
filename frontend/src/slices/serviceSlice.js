@@ -44,10 +44,13 @@ export const serviceSlice = apiSlice.injectEndpoints({
                 body: data,
             }),
         }),
-
+        searchServices: builder.query({
+            query: ({ name }) => `${SERVICES_URL}/search/${name}`,
+            providesTags: ['Service'],
+        }),
 
     }),
 });
 
 //useGetServicesQuery bản chất nó là getServices
-export const { useGetServicesQuery, useGetServiceDetailsQuery, useDeleteServiceMutation, useCreateServiceMutation, useUpdateServiceMutation, useUploadServiceImageMutation } = serviceSlice;
+export const { useGetServicesQuery, useGetServiceDetailsQuery, useDeleteServiceMutation, useCreateServiceMutation, useUpdateServiceMutation, useUploadServiceImageMutation, useSearchServicesQuery } = serviceSlice;

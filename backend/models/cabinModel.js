@@ -54,6 +54,14 @@ const cabinSchema = mongoose.Schema(
             type: String,
             required: [true, 'A cabin must be have a description'],
         },
+        ratingsAverage: {
+            type: Number,
+            default: 4.6
+        },
+        ratingQuantity: {
+            type: Number,
+            default: 1
+        },
         reviews: [reviewSchema],
 
     },

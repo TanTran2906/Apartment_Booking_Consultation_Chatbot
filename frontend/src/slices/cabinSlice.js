@@ -44,10 +44,17 @@ export const cabinSlice = apiSlice.injectEndpoints({
                 body: data,
             }),
         }),
-
+        getTopCabins: builder.query({
+            query: () => `${CABINS_URL}/top`,
+            keepUnusedDataFor: 5,
+        }),
+        searchCabins: builder.query({
+            query: ({ name }) => `${CABINS_URL}/search/${name}`,
+            providesTags: ['Cabin'],
+        }),
 
     }),
 });
 
 //useGetCabinsQuery bản chất nó là getCabins
-export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation, useUpdateCabinMutation, useUploadCabinImageMutation } = cabinSlice;
+export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation, useUpdateCabinMutation, useUploadCabinImageMutation, useGetTopCabinsQuery, useSearchCabinsQuery } = cabinSlice;

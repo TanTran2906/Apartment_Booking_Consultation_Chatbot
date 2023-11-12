@@ -23,12 +23,13 @@ import { DarkModeProvider } from "./context/DarkModeContext";
 import ClientLayout from "./ui/client/ClientLayout";
 import Homepage from "./pages/client/Homepage";
 import CabinsToDisplay from "./pages/client/CabinsToDisplay";
+import ServicesToDisplay from "./pages/client/ServicesToDisplay";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 1000,
+      staleTime: 0,
     },
   },
 });
@@ -38,7 +39,7 @@ function App() {
   return (
     <DarkModeProvider>
       <QueryClientProvider client={queryClient}>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
         <GlobalStyles />
         <BrowserRouter>
           <Routes>
@@ -74,6 +75,8 @@ function App() {
               />
               <Route path="home" element={<Homepage />} />
               <Route path="cabins" element={<CabinsToDisplay />} />
+              <Route path="services" element={<ServicesToDisplay />} />
+
 
             </Route>
 

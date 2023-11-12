@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import SidebarTools from "../../ui/client/SidebarTools";
-import CabinList from "../../ui/client/CabinList";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import ServiceList from "../../ui/client/ServiceList";
 
 const StyledContainer = styled.div`
     width: 1170px;
@@ -12,34 +12,34 @@ const StyledContainer = styled.div`
     gap: 30px;
 `;
 
-function CabinsToDisplay() {
+function ServicesToDisplay() {
     //Lift state
     const [search, setSearch] = useState("");
-    async function fetchCabinSearchByName(name) {
+    async function fetchServiceSearchByName(name) {
         if (search.length === 0) {
-            const response = await fetch(`/api/cabins`);
+            const response = await fetch(`/api/services`);
             const data = await response.json();
             return data;
         } else {
-            const response = await fetch(`/api/cabins/search/${name}`);
+            const response = await fetch(`/api/services/search/${name}`);
             const data = await response.json();
             return data;
         }
     }
 
     const { data } = useQuery({
-        queryKey: ["Cabins", search],
-        queryFn: () => fetchCabinSearchByName(search),
+        queryKey: ["Services", search],
+        queryFn: () => fetchServiceSearchByName(search),
     });
 
     return (
         <>
             <StyledContainer>
                 <SidebarTools search={search} setSearch={setSearch} />
-                <CabinList dataForSearch={data} />
+                <ServiceList dataForSearch={data} />
             </StyledContainer>
         </>
     );
 }
 
-export default CabinsToDisplay;
+export default ServicesToDisplay;

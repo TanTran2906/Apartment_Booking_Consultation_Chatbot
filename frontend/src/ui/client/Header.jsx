@@ -1,4 +1,5 @@
 import styles from "../../styles/clientStyles/Header.module.css";
+import { Link } from "react-router-dom";
 function Header() {
     return (
         <>
@@ -7,42 +8,47 @@ function Header() {
                     <div className={styles.header__inner}>
                         {/* <!-- Logo --> */}
                         <div className={styles.header__logo}>
-                            <img
-                                src="/logo_dark_transparent.png"
-                                alt="Lucy"
-                                className={styles.logo}
-                            />
-                            <p className={styles.header__name}>
-                                The Stella Hotel
-                            </p>
+                            <Link to="/home" className={styles.navbar__link}>
+                                <img
+                                    src="/logo_dark_transparent.png"
+                                    alt="Lucy"
+                                    className={styles.logo}
+                                />
+                            </Link>
+
+                            <Link to="/home" className={styles.navbar__link}>
+                                <p className={styles.header__name}>
+                                    The Stella Hotel
+                                </p>
+                            </Link>
                         </div>
 
                         {/* <!-- Navbar --> */}
                         <nav className={styles.navbar}>
                             <ul className={styles.navbar__list}>
                                 <li className={styles.navbar__item}>
-                                    <a
-                                        href="#!"
+                                    <Link
+                                        to="/home"
                                         className={styles.navbar__link}
                                     >
                                         Home
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className={styles.navbar__item}>
-                                    <a
-                                        href="#!"
+                                    <Link
+                                        to="/cabins"
                                         className={styles.navbar__link}
                                     >
                                         Cabins
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className={styles.navbar__item}>
-                                    <a
-                                        href="#!"
+                                    <Link
+                                        to="/services"
                                         className={styles.navbar__link}
                                     >
                                         Services
-                                    </a>
+                                    </Link>
                                 </li>
                                 {/* <li className={styles.navbar__item}>
                                     <a
@@ -65,15 +71,15 @@ function Header() {
 
                         {/* <!-- Header action --> */}
                         <div className={styles.action}>
-                            <a href="#!" className={styles.action__link}>
+                            <Link to="/login" className={styles.action__link}>
                                 Sign in
-                            </a>
-                            <a
-                                href="#!"
+                            </Link>
+                            <Link
+                                to="/register"
                                 className={`${styles.btn} ${styles.action__btn}`}
                             >
                                 Sign up
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

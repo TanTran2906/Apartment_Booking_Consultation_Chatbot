@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "../../styles/clientStyles/About.module.css";
 function About() {
     return (
@@ -195,14 +196,14 @@ function About() {
                                                 have everything prepared for
                                                 when you return.
                                             </p>
-                                            <a
-                                                href="#!"
+                                            <Link
+                                                to="/cabins"
                                                 className={
                                                     styles.tab__content_more
                                                 }
                                             >
                                                 View more
-                                            </a>
+                                            </Link>
                                         </div>
 
                                         {/* <!-- Tab content 2 --> */}

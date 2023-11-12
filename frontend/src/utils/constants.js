@@ -11,6 +11,8 @@ export const PAYPAL_URL = '/api/config/paypal';
 export const UPLOADS_URL = '/api/upload'
 
 export const PAGE_SIZE = 10
+export const PAGE_SIZE_CABINS = 3
+export const PAGE_SIZE_SERVICES = 3
 export const NEW_DATE = new Date();
 
 

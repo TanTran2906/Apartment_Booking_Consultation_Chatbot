@@ -1,6 +1,7 @@
-import SortBy from "../SortBy";
-import Filter from "../Filter";
+import SortBy from "../../ui/SortBy";
+import Filter from "../../ui/Filter";
 import styled from "styled-components";
+// import TableOperations from "../../ui/TableOperations";
 
 const TableOperations = styled.div`
     display: flex;
@@ -19,7 +20,7 @@ const Heading = styled.h3`
     line-height: 24px;
 `;
 
-function CabinTableOperations() {
+function ServiceTableOperations() {
     return (
         <TableOperations>
             <Heading>Filter By</Heading>
@@ -45,18 +46,10 @@ function CabinTableOperations() {
                         value: "regularPrice-desc",
                         label: "Sort by price (high first)",
                     },
-                    {
-                        value: "maxCapacity-asc",
-                        label: "Sort by capacity (low first)",
-                    },
-                    {
-                        value: "maxCapacity-desc",
-                        label: "Sort by capacity (high first)",
-                    },
                 ]}
             />
         </TableOperations>
     );
 }
 
-export default CabinTableOperations;
+export default ServiceTableOperations;

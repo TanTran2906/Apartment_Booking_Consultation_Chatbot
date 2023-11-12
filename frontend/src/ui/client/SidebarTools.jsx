@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
-import CabinTableOperations from "./CabinTableOperations";
+// import { FaSearch } from "react-icons/fa";
+import ServiceTableOperations from "./ServiceTableOperations";
 
 const StyledSidebarTools = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 50px;
 `;
 
 const StyledFindTool = styled.div`
@@ -47,32 +47,37 @@ const Input = styled.input`
     padding: 12px 16px;
 `;
 
-const Button = styled.button`
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    color: #ffffff;
-    background-color: #1668e3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+// const Button = styled.button`
+//     width: 50px;
+//     height: 50px;
+//     border-radius: 50%;
+//     color: #ffffff;
+//     background-color: #1668e3;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// `;
 
-function SidebarTools() {
+function SidebarTools({ search, setSearch }) {
     return (
         <>
             <StyledSidebarTools>
                 <StyledFindTool>
                     <Heading>Search by property name</Heading>
                     <StyledFind>
-                        <Input type="text" placeholder="e.g.Wood" />
-                        <Button>
+                        <Input
+                            type="text"
+                            placeholder="e.g.Wood"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                        {/* <Button disabled={isSearching}>
                             <FaSearch />
-                        </Button>
+                        </Button> */}
                     </StyledFind>
                 </StyledFindTool>
 
-                {/* <CabinTableOperations /> */}
+                <ServiceTableOperations />
             </StyledSidebarTools>
         </>
     );

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "../../styles/clientStyles/Hero.module.css";
 function Hero() {
     return (
@@ -121,8 +122,8 @@ function Hero() {
                                 embark on your adventure!
                             </p>
                             <div className={styles.hero__row}>
-                                <a
-                                    href="#!"
+                                <Link
+                                    to="/cabins"
                                     className={`${styles.btn} ${styles.btn__primary} ${styles.hero__cta_btn}`}
                                 >
                                     Book a Cabin
@@ -142,7 +143,7 @@ function Hero() {
                                             />
                                         </svg>
                                     </span>
-                                </a>
+                                </Link>
                                 <a href="#!" className={styles.hero__cta_link}>
                                     Schedule a Call
                                 </a>

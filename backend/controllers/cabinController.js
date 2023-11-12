@@ -50,13 +50,13 @@ export const createCabin = asyncHandler(async (req, res, next) => {
         name: `Sample name ${[...Array(4)].map(() => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('')}`,
         // user: req.user._id,
         maxCapacity: 1,
-        regularPrice: 10,
+        regularPrice: 100,
         discount: 0,
         image: '/cabins/sample.jpg',
         description:
             "Indulge in the ultimate luxury family vacation in this medium-sized cabin 004. Designed for families of up to 4, this cabin offers a sumptuous retreat for the discerning traveler. Inside, the cabin boasts of opulent interiors crafted from the finest quality wood, a comfortable living area, a fireplace, and a fully-equipped gourmet kitchen. The bedrooms are adorned with plush beds and spa-inspired en-suite bathrooms. Step outside to your private deck and soak in the natural surroundings while relaxing in your own hot tub.",
-        ratingsAverage: 4.5,
-        ratingQuantity: 0,
+        ratingsAverage: 4.6,
+        ratingQuantity: 1,
         reviews: [],
     });
 
@@ -115,6 +115,33 @@ export const updateCabin = asyncHandler(async (req, res, next) => {
         res.status(200).json(updatedCabin);
     } else {
         return next(new AppError('No cabin found with that ID', 404))
+    }
+});
+
+// @desc    Get top rated cabins
+// @route   GET /api/cabins/top
+// @access  Public
+export const getTopCabins = asyncHandler(async (req, res, next) => {
+    const cabins = await Cabin.find({}).sort({ ratingsAverage: -1 }).limit(3);
+
+    res.status(200).json(cabins);
+});
+
+// @desc    Search cabins by name
+// @route   GET /api/cabins/search/:name
+// @access  Public
+export const searchCabins = asyncHandler(async (req, res) => {
+    const { name } = req.params;
+
+    // Sử dụng biểu thức chính quy để tìm kiếm các cabins có tên chứa từ khóa
+    const cabins = await Cabin.find({ name: { $regex: new RegExp(name, 'i') } });
+
+    if (cabins) {
+        res.status(200).json(
+            cabins
+        );
+    } else {
+        return next(new AppError('No cabin found with that name', 404))
     }
 });
 

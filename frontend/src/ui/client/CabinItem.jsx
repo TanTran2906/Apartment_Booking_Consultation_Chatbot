@@ -85,7 +85,7 @@ const StylePriceAndRate = styled.div`
 `;
 
 const Price = styled.p`
-    color: var(--primary-color-01, #b89146);
+    ${(props) => (props.discount ? "color: red;" : "color: #b89146;")}
 
     /* Tagline/05 */
     text-align: center;
@@ -134,22 +134,25 @@ const LinkTo = styled.div`
     text-transform: uppercase;
 `;
 
-function CabinItem() {
+function CabinItem({ cabin }) {
+    const {
+        // _id: cabinId,
+        name,
+        maxCapacity,
+        regularPrice,
+        discount,
+        image,
+        description,
+        ratingsAverage,
+        ratingQuantity,
+    } = cabin;
+
     return (
         <StyleCabinItem>
-            <Img src="/cabins/cabin-001.jpg" />
+            <Img src={image} />
             <StyledCabinInformation>
-                <Heading>001</Heading>
-                <Description>
-                    Discover the ultimate luxury getaway for couples in the cozy
-                    wooden cabin 001. Nestled in a picturesque forest, this
-                    stunning cabin offers a secluded and intimate retreat.
-                    Inside, enjoy modern high-quality wood interiors, a
-                    comfortable seating area, a fireplace and a fully-equipped
-                    kitchen. The plush king-size bed, dressed in fine linens
-                    guarantees a peaceful nights sleep. Relax in the spa-like
-                    shower and unwind on the private deck with hot tub.
-                </Description>
+                <Heading>Cabin {name}</Heading>
+                <Description>{description}</Description>
                 <StyleMaxCapacity>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -163,14 +166,16 @@ function CabinItem() {
                             fill="#B89146"
                         />
                     </svg>
-                    <MaxCapacity>(4) Guest's</MaxCapacity>
+                    <MaxCapacity>({maxCapacity}) Guest's</MaxCapacity>
                 </StyleMaxCapacity>
             </StyledCabinInformation>
 
             <Line />
 
             <StylePriceAndRate>
-                <Price>$219 / Night</Price>
+                <Price discount={discount ? true : false}>
+                    ${regularPrice - discount} / Night
+                </Price>
                 <StyleQuanityAndRate>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -184,8 +189,8 @@ function CabinItem() {
                             fill="#B89146"
                         />
                     </svg>
-                    <Rate>4.5</Rate>
-                    <Quanity>80 reviews</Quanity>
+                    <Rate>{ratingsAverage || 4.6}</Rate>
+                    <Quanity>{ratingQuantity || 1} reviews</Quanity>
                 </StyleQuanityAndRate>
 
                 <StyleLinkToDetail>
@@ -200,9 +205,9 @@ function CabinItem() {
                         <text
                             x="50%"
                             y="50%"
-                            text-anchor="middle"
+                            textAnchor="middle"
                             dy=".3em"
-                            font-size="12"
+                            fontSize="12"
                             fill="#B89146"
                         >
                             &#62;

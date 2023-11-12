@@ -102,3 +102,20 @@ export const updateService = asyncHandler(async (req, res, next) => {
     }
 });
 
+// @desc    Search services by name
+// @route   GET /api/services/search/:name
+// @access  Public
+export const searchServices = asyncHandler(async (req, res) => {
+    const { name } = req.params;
+
+    // Sử dụng biểu thức chính quy để tìm kiếm các services có tên chứa từ khóa
+    const services = await Service.find({ name: { $regex: new RegExp(name, 'i') } });
+
+    if (services) {
+        res.status(200).json(
+            services
+        );
+    } else {
+        return next(new AppError('No service found with that name', 404))
+    }
+});

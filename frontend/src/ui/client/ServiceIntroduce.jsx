@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "../../styles/clientStyles/ServiceIntroduce.module.css";
 function ServiceIntroduce() {
     return (
@@ -83,12 +84,12 @@ function ServiceIntroduce() {
                                 />
                             </figure>
                             <div className={styles.service__cta_wrap}>
-                                <a
-                                    href="#!"
+                                <Link
+                                    to="/services"
                                     className={`${styles.service__cta} ${styles.btn}`}
                                 >
                                     View All Services
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         <div className={styles.service__column}>

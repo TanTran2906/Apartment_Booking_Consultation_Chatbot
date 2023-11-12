@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "../../styles/clientStyles/Footer.module.css";
 function Footer() {
     return (
@@ -100,28 +101,21 @@ function Footer() {
                                             </a>
                                         </li>
                                         <li>
-                                            <a
-                                                href="#!"
+                                            <Link
+                                                to="/services"
                                                 className={styles.footer__link}
                                             >
                                                 Services
-                                            </a>
+                                            </Link>
                                         </li>
+
                                         <li>
-                                            <a
-                                                href="#!"
-                                                className={styles.footer__link}
-                                            >
-                                                Our Team
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="#!"
+                                            <Link
+                                                to="/cabins"
                                                 className={styles.footer__link}
                                             >
                                                 Cabins
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </section>
