@@ -24,6 +24,9 @@ import ClientLayout from "./ui/client/ClientLayout";
 import Homepage from "./pages/client/Homepage";
 import CabinsToDisplay from "./pages/client/CabinsToDisplay";
 import ServicesToDisplay from "./pages/client/ServicesToDisplay";
+import CabinDetail from "./pages/client/CabinDetail";
+import ServiceDetail from "./pages/client/ServiceDetail";
+import PrivateRoute from "./features/authentication/PrivateRoute";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -68,17 +71,28 @@ function App() {
             </Route>
 
             {/* CLIENT PAGE */}
-            <Route element={<ClientLayout />}>
-              <Route
-                index
-                element={<Navigate replace to="home" />}
-              />
-              <Route path="home" element={<Homepage />} />
-              <Route path="cabins" element={<CabinsToDisplay />} />
-              <Route path="services" element={<ServicesToDisplay />} />
+            <Route path='' element={<PrivateRoute />}>
+              <Route element={<ClientLayout />}>
+                <Route
+                  index
+                  element={<Navigate replace to="home" />}
+                />
+                <Route path="home" element={<Homepage />} />
+                <Route path="cabins" element={<CabinsToDisplay />} />
+                <Route
+                  path="cabins/:cabinId"
+                  element={<CabinDetail />}
+                />
+                <Route path="services" element={<ServicesToDisplay />} />
+                <Route
+                  path="services/:serviceId"
+                  element={<ServiceDetail />}
+                />
+                <Route path="/account" element={<Account />} />
 
-
+              </Route>
             </Route>
+
 
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Signup />} />

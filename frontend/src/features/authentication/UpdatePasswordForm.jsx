@@ -7,9 +7,11 @@ import { useProfileMutation } from "../../slices/userSlice";
 import toast from "react-hot-toast";
 import { setCredentials } from "../../slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 // import { useUpdateUser } from './useUpdateUser';
 
 function UpdatePasswordForm() {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState, getValues, reset } = useForm();
     const { errors } = formState;
 
@@ -24,12 +26,14 @@ function UpdatePasswordForm() {
                 _id: userInfo._id,
                 ...data,
             });
-            console.log(res);
+            // console.log(res);
 
             dispatch(setCredentials({ ...res }));
             toast.success("Password successfully updated");
 
             reset();
+
+            navigate("/login");
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }

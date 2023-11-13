@@ -26,18 +26,32 @@ const Avatar = styled.img`
 function UserAvatar() {
     const { userInfo } = useSelector((state) => state.auth);
 
-    const { fullName, photo } = userInfo;
+    const { fullName, photo, isAdmin } = userInfo;
 
     return (
-        <Link to="admin/account">
-            <StyledUserAvatar>
-                <Avatar
-                    src={photo || "/default-user.jpg"}
-                    alt={`Avatar of ${fullName}`}
-                />
-                <span>{fullName}</span>
-            </StyledUserAvatar>
-        </Link>
+        <>
+            {isAdmin ? (
+                <Link to="admin/account">
+                    <StyledUserAvatar>
+                        <Avatar
+                            src={photo || "/default-user.jpg"}
+                            alt={`Avatar of ${fullName}`}
+                        />
+                        <span>{fullName}</span>
+                    </StyledUserAvatar>
+                </Link>
+            ) : (
+                <Link to="/account">
+                    <StyledUserAvatar>
+                        <Avatar
+                            src={photo || "/default-user.jpg"}
+                            alt={`Avatar of ${fullName}`}
+                        />
+                        <span>{fullName}</span>
+                    </StyledUserAvatar>
+                </Link>
+            )}
+        </>
     );
 }
 

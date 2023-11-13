@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyleServiceItem = styled.div`
@@ -128,17 +129,22 @@ const StyleLinkToDetail = styled.a`
     gap: 4px;
 `;
 
-const LinkTo = styled.div`
+const LinkTo = styled.button`
     color: var(--primary-color-01, #b89146);
     font-size: 1.4rem;
     font-weight: 600;
     line-height: 24px; /* 171.429% */
     text-transform: uppercase;
+    padding: 2px 5px;
+    border: 1px solid #b89146;
+    border-radius: 10px;
 `;
 
 function ServiceItem({ service }) {
+    const navigate = useNavigate();
+
     const {
-        // _id: serviceId,
+        _id: serviceId,
         name,
         regularPrice,
         discount,
@@ -181,7 +187,9 @@ function ServiceItem({ service }) {
                             &#62;
                         </text>
                     </svg>
-                    <LinkTo>READ MORE</LinkTo>
+                    <LinkTo onClick={() => navigate(`/services/${serviceId}`)}>
+                        READ MORE
+                    </LinkTo>
                 </StyleLinkToDetail>
             </StylePriceAndDiscount>
         </StyleServiceItem>

@@ -1,56 +1,31 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Heading from "../../ui/Heading";
+import Button from "../../ui/Button";
+import Instruction from "../../ui/client/Instruction";
+import { useGetCabinDetailsQuery } from "../../slices/cabinSlice";
+import { useParams } from "react-router-dom";
+import Spinner from "../../ui/Spinner";
+import Empty from "../../ui/Empty";
 
-const StyleCabinItem = styled.div`
+const StyledContainer = styled.div`
+    width: 2550px;
+    max-width: calc(100% - 250px);
+    margin: 0 auto;
     display: flex;
-    width: 960px;
-    height: 250px;
-    flex-shrink: 0;
-    gap: 50px;
+    gap: 30px;
+`;
+
+const StyledBooknow = styled.div`
+    position: relative;
+    display: grid;
+    grid-template-rows: 20% 20% 25% 35%;
+    grid-template-columns: 100%;
+    width: 450px;
+    height: 347px;
     border: 1px solid var(--text-color-01, rgba(14, 19, 23, 0.1));
-    /* opacity: 0.1; */
-`;
-
-const Img = styled.img`
-    width: 300px;
-    height: 250px;
-    object-fit: cover; /* Đảm bảo hình ảnh điền đầy đối tượng không làm méo hoặc căng hình */
-    object-position: center center; /* Canh giữa hình ảnh */
-`;
-
-const StyledCabinInformation = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 40px 0;
-`;
-
-const Heading = styled.h4`
-    color: var(--text-color-01, #0e1317);
-
-    /* Heading/H4 */
-    font-size: 2.4rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 34px; /* 141.667% */
-`;
-
-const Description = styled.p`
-    width: 330px;
-    /* height: 80px; */
-    color: var(--text-color-03, #666667);
-
-    overflow: hidden;
-    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi văn bản vượt quá kích thước */
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Số dòng tối đa */
-    -webkit-box-orient: vertical;
-
-    /* Paragraph/02 */
-    font-size: 1.5rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 26px; /* 173.333% */
+    padding: 30px 48px 30px 30px;
+    align-items: center;
+    justify-content: start;
 `;
 
 const StyleMaxCapacity = styled.div`
@@ -58,6 +33,15 @@ const StyleMaxCapacity = styled.div`
     align-items: center;
     /* justify-content: center; */
     gap: 10px;
+`;
+
+const ShortLine = styled.div`
+    position: absolute;
+    top: 75px;
+    left: 30px;
+    width: 70px;
+    height: 1px;
+    background: var(--primary-color-01, #b89146);
 `;
 
 const MaxCapacity = styled.p`
@@ -70,95 +54,72 @@ const MaxCapacity = styled.p`
     line-height: 26px; /* 173.333% */
 `;
 
-const Line = styled.div`
-    width: 1px;
-    height: 170px;
-    margin: 40px 0px;
-    opacity: 0.1;
-    background: var(--text-color-01, #0e1317);
+const Price = styled.p`
+    color: var(--text-color-01, #0e1317);
+    /* Heading/H4 */
+    /* font-family: "Bai Jamjuree", sans-serif; */
+    font-size: 2.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 34px; /* 141.667% */
 `;
 
-const StylePriceAndRate = styled.div`
+const Span = styled.span`
+    color: var(--text-color-03, #666667);
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+`;
+
+const StyleCabinDetail = styled.div`
+    width: 960px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 69px 60px 89px 0px;
+    gap: 30px;
 `;
 
-const Price = styled.p`
-    ${(props) => (props.discount ? "color: red;" : "color: #b89146;")}
-
-    /* Tagline/05 */
-    text-align: center;
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 24px; /* 171.429% */
-`;
-
-const StyleQuanityAndRate = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-`;
-
-const Rate = styled.p`
-    color: var(--text-color-01, #0e1317);
-
-    /* Tagline/05 */
-    font-size: 1.4rem;
-    font-weight: 600;
-    line-height: 24px; /* 171.429% */
-`;
-
-const Quanity = styled.p`
+export const Description = styled.p`
     color: var(--text-color-02, #333334);
-
-    /* Paragraph/03 */
-    font-size: 1.3rem;
+    /* Paragraph/02 */
+    font-size: 1.6rem;
     font-weight: 400;
-    line-height: 24px; /* 184.615% */
+    line-height: 26px; /* 173.333% */
 `;
 
-const StyleLinkToDetail = styled.a`
-    display: flex;
-    align-items: center;
-    gap: 4px;
+const Img = styled.img`
+    margin: auto;
+    width: 900px;
+    object-fit: cover; /* Đảm bảo hình ảnh điền đầy đối tượng không làm méo hoặc căng hình */
+    object-position: center center; /* Canh giữa hình ảnh */
 `;
 
-const LinkTo = styled.button`
-    color: var(--primary-color-01, #b89146);
-    font-size: 1.4rem;
-    font-weight: 600;
-    line-height: 24px; /* 171.429% */
-    text-transform: uppercase;
-    padding: 2px 5px;
-    border: 1px solid #b89146;
-    border-radius: 10px;
-`;
+function CabinDetail() {
+    const { cabinId } = useParams();
+    const {
+        data: cabin,
+        isLoading,
+        isError,
+    } = useGetCabinDetailsQuery(cabinId);
 
-function CabinItem({ cabin }) {
-    const navigate = useNavigate();
+    if (isLoading) return <Spinner />;
+    if (isError) return <Empty source="cabin" />;
 
     const {
-        _id: cabinId,
         name,
-        maxCapacity,
         regularPrice,
         discount,
-        image,
+        maxCapacity,
         description,
-        ratingsAverage,
-        ratingQuantity,
+        image,
+        // reviews,
     } = cabin;
 
     return (
-        <StyleCabinItem>
-            <Img src={image} />
-            <StyledCabinInformation>
-                <Heading>Cabin {name}</Heading>
-                <Description>{description}</Description>
+        <StyledContainer>
+            <StyledBooknow>
+                <Heading as="h3">Your rice</Heading>
+                <ShortLine />
                 <StyleMaxCapacity>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -179,6 +140,7 @@ function CabinItem({ cabin }) {
                     <MaxCapacity>
                         ({Math.ceil(maxCapacity / 2)}) Bed's
                     </MaxCapacity>
+
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -193,58 +155,23 @@ function CabinItem({ cabin }) {
                     </svg>
                     <MaxCapacity>({maxCapacity}) Guest's</MaxCapacity>
                 </StyleMaxCapacity>
-            </StyledCabinInformation>
-
-            <Line />
-
-            <StylePriceAndRate>
-                <Price discount={discount ? true : false}>
-                    ${regularPrice - discount} / Night
+                <Price>
+                    ${regularPrice - discount}
+                    <Span>/Night</Span>
                 </Price>
-                <StyleQuanityAndRate>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="15"
-                        viewBox="0 0 14 15"
-                        fill="none"
-                    >
-                        <path
-                            d="M6.28671 1.19529C6.51122 0.504306 7.48878 0.504305 7.71329 1.19529L8.85224 4.70061C8.95265 5.00963 9.24061 5.21885 9.56553 5.21885H13.2512C13.9778 5.21885 14.2799 6.14856 13.6921 6.57561L10.7103 8.74202C10.4474 8.933 10.3374 9.27153 10.4378 9.58054L11.5768 13.0859C11.8013 13.7768 11.0104 14.3514 10.4226 13.9244L7.44084 11.758C7.17797 11.567 6.82203 11.567 6.55916 11.758L3.57736 13.9244C2.98957 14.3514 2.19871 13.7768 2.42322 13.0859L3.56217 9.58054C3.66258 9.27153 3.55259 8.933 3.28972 8.74202L0.307916 6.57561C-0.279869 6.14856 0.022212 5.21885 0.748755 5.21885H4.43447C4.75939 5.21885 5.04735 5.00963 5.14776 4.70061L6.28671 1.19529Z"
-                            fill="#B89146"
-                        />
-                    </svg>
-                    <Rate>{ratingsAverage || 4.6}</Rate>
-                    <Quanity>{ratingQuantity || 1} reviews</Quanity>
-                </StyleQuanityAndRate>
+                <Button size="large">Book Now</Button>
+            </StyledBooknow>
 
-                <StyleLinkToDetail>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                    >
-                        <circle cx="9" cy="9" r="8.5" stroke="#B89146" />
-                        <text
-                            x="50%"
-                            y="50%"
-                            textAnchor="middle"
-                            dy=".3em"
-                            fontSize="12"
-                            fill="#B89146"
-                        >
-                            &#62;
-                        </text>
-                    </svg>
-                    <LinkTo onClick={() => navigate(`/cabins/${cabinId}`)}>
-                        READ MORE
-                    </LinkTo>
-                </StyleLinkToDetail>
-            </StylePriceAndRate>
-        </StyleCabinItem>
+            <StyleCabinDetail>
+                <Heading as="h1">Cabin {name}</Heading>
+                <Description>{description}</Description>
+
+                <Img src={image} />
+
+                <Instruction />
+            </StyleCabinDetail>
+        </StyledContainer>
     );
 }
 
-export default CabinItem;
+export default CabinDetail;

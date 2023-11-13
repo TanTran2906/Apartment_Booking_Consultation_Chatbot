@@ -63,8 +63,7 @@ function LoginForm() {
             setPassword("");
             if (res.isAdmin) {
                 navigate("/admin/dashboard");
-            }
-            // navigate();
+            } else navigate("/home");
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
