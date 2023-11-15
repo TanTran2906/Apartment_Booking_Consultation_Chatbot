@@ -3,9 +3,11 @@ import Heading from "../../ui/Heading";
 import Button from "../../ui/Button";
 import Instruction from "../../ui/client/Instruction";
 import { useGetCabinDetailsQuery } from "../../slices/cabinSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
+import { useDispatch } from "react-redux";
+import { addToCabin } from "../../slices/bookingLocalStorage";
 
 const StyledContainer = styled.div`
     width: 2550px;
@@ -96,6 +98,9 @@ const Img = styled.img`
 
 function CabinDetail() {
     const { cabinId } = useParams();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const {
         data: cabin,
         isLoading,
@@ -114,6 +119,11 @@ function CabinDetail() {
         image,
         // reviews,
     } = cabin;
+
+    const addToCabinHandler = () => {
+        dispatch(addToCabin({ ...cabin }));
+        navigate("/bookingInfo");
+    };
 
     return (
         <StyledContainer>
@@ -159,7 +169,9 @@ function CabinDetail() {
                     ${regularPrice - discount}
                     <Span>/Night</Span>
                 </Price>
-                <Button size="large">Book Now</Button>
+                <Button size="large" onClick={addToCabinHandler}>
+                    Book Now
+                </Button>
             </StyledBooknow>
 
             <StyleCabinDetail>

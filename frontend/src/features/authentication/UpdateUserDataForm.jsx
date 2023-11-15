@@ -88,7 +88,7 @@ function UpdateUserDataForm() {
                     id="fullName"
                 />
             </FormRow>
-            <FormRow label="National ID">
+            <FormRow label="Passport">
                 <Input
                     type="text"
                     value={nationalID}

@@ -27,6 +27,8 @@ import ServicesToDisplay from "./pages/client/ServicesToDisplay";
 import CabinDetail from "./pages/client/CabinDetail";
 import ServiceDetail from "./pages/client/ServiceDetail";
 import PrivateRoute from "./features/authentication/PrivateRoute";
+import BookingInfo from "./pages/client/BookingInfo";
+import PaymentScreen from "./pages/client/PaymentScreen";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -71,27 +73,31 @@ function App() {
             </Route>
 
             {/* CLIENT PAGE */}
-            <Route path='' element={<PrivateRoute />}>
-              <Route element={<ClientLayout />}>
-                <Route
-                  index
-                  element={<Navigate replace to="home" />}
-                />
-                <Route path="home" element={<Homepage />} />
-                <Route path="cabins" element={<CabinsToDisplay />} />
-                <Route
-                  path="cabins/:cabinId"
-                  element={<CabinDetail />}
-                />
-                <Route path="services" element={<ServicesToDisplay />} />
-                <Route
-                  path="services/:serviceId"
-                  element={<ServiceDetail />}
-                />
-                <Route path="/account" element={<Account />} />
 
+            <Route element={<ClientLayout />}>
+              <Route
+                index
+                element={<Navigate replace to="home" />}
+              />
+              <Route path="home" element={<Homepage />} />
+              <Route path="cabins" element={<CabinsToDisplay />} />
+              <Route
+                path="cabins/:cabinId"
+                element={<CabinDetail />}
+              />
+              <Route path="services" element={<ServicesToDisplay />} />
+              <Route
+                path="services/:serviceId"
+                element={<ServiceDetail />}
+              />
+
+              <Route path='' element={<PrivateRoute />}>
+                <Route path="/bookingInfo" element={<BookingInfo />} />
+                <Route path="/payment" element={<PaymentScreen />} />
+                <Route path="/account" element={<Account />} />
               </Route>
             </Route>
+
 
 
             <Route path="login" element={<Login />} />

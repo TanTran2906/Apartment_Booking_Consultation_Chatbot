@@ -147,7 +147,7 @@ function SignUpForm() {
                 />
             </FormRow>
 
-            <FormRow label="National ID" error={errors?.fullName?.message}>
+            <FormRow label="Passport" error={errors?.fullName?.message}>
                 <Input
                     type="text"
                     id="nationalID"

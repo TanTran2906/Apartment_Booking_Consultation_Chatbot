@@ -2,6 +2,7 @@ import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import UpdateUserDataForm from "../features/authentication/UpdateUserDataForm";
 import UpdatePasswordForm from "../features/authentication/UpdatePasswordForm";
+// import styled from "styled-components";
 
 function Account() {
     return (
