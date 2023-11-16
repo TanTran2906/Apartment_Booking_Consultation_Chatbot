@@ -121,6 +121,76 @@ export const deleteBooking = asyncHandler(async (req, res, next) => {
     }
 });
 
+// @desc    Create new booking
+// @route   POST /api/bookings
+// @access  Private
+export const addBooking = asyncHandler(async (req, res, next) => {
+
+    const {
+        services,
+        user,
+        cabin,
+        paymentMethod,
+        totalPrice,
+        numNights,
+        numGuests,
+        startDate,
+        endDate,
+        observations
+    } = req.body;
+
+    // console.log({
+    //     services,
+    //     user,
+    //     cabin,
+    //     paymentMethod,
+    //     totalPrice,
+    //     numNights,
+    //     numGuests,
+    //     startDate,
+    //     endDate,
+    //     observations
+    // })
+
+    const booking = new Booking({
+        services: services.map((x) => ({
+            _id: x._id,
+        })),
+        user,
+        cabin,
+        status: "unconfirmed",
+        paymentMethod,
+        totalPrice,
+        numNights,
+        numGuests,
+        startDate,
+        endDate,
+        observations
+    });
+
+    console.log(booking)
+
+    if (booking) {
+        const createdBooking = await booking.save();
+
+        res.status(201).json(createdBooking);
+    } else {
+        return next(new AppError('Booking could not be created', 404))
+    }
+
+})
+
+
+// @desc    Get logged in user orders
+// @route   GET /api/orders/myorders
+// @access  Private
+// export const getMyBooings = asyncHandler(async (req, res, next) => {
+//     const orders = await Booking.find({ user: req.user._id });
+//     res.json(orders);
+// });
+
+
+
 //=========================== STATISTICS ===========================//
 export const getBookingsAfterDate = asyncHandler(async (req, res, next) => {
     const { date } = req.params;

@@ -15,6 +15,14 @@ export const bookingSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Booking'],
         }),
+        createBooking: builder.mutation({
+            query: (booking) => ({
+                url: BOOKINGS_URL,
+                method: 'POST',
+                body: { ...booking },
+            }),
+        }),
+
         updateCheckinBooking: builder.mutation({
             query: (bookingId) => ({
                 url: `${BOOKINGS_URL}/checkin/${bookingId}`,
@@ -59,4 +67,4 @@ export const bookingSlice = apiSlice.injectEndpoints({
 
 export const { useGetBookingsQuery, useGetBookingDetailsQuery, useUpdateCheckinBookingMutation,
     useUpdateCheckOutBookingMutation, useDeleteBookingMutation, useGetBookingsAfterDateQuery,
-    useGetStaysAfterDateQuery, useGetActivitiesQuery } = bookingSlice
+    useGetStaysAfterDateQuery, useGetActivitiesQuery, useCreateBookingMutation } = bookingSlice

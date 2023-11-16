@@ -79,7 +79,7 @@ const PaymentScreen = () => {
     async function onSubmit(data) {
         try {
             dispatch(savePaymentMethod(data.PayPal));
-            // navigate("/booking");
+            navigate("/booking");
             toast.success("Payment method successfully updated");
         } catch (err) {
             toast.error(err?.data?.message || err.error);

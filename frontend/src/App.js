@@ -29,6 +29,8 @@ import ServiceDetail from "./pages/client/ServiceDetail";
 import PrivateRoute from "./features/authentication/PrivateRoute";
 import BookingInfo from "./pages/client/BookingInfo";
 import PaymentScreen from "./pages/client/PaymentScreen";
+import NewBooking from "./pages/client/NewBooking";
+import BookingScreen from "./pages/client/BookingScreen";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -94,6 +96,8 @@ function App() {
               <Route path='' element={<PrivateRoute />}>
                 <Route path="/bookingInfo" element={<BookingInfo />} />
                 <Route path="/payment" element={<PaymentScreen />} />
+                <Route path="/booking" element={<NewBooking />} />
+                <Route path="/booking/:bookingId" element={<BookingScreen />} />
                 <Route path="/account" element={<Account />} />
               </Route>
             </Route>

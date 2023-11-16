@@ -56,6 +56,7 @@ const bookingSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
+        default: 'PayPal'
     },
     paymentResult: {
         id: { type: String },
