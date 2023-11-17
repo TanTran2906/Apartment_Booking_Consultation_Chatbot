@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const StyleCabinItem = styled.div`
     display: flex;
@@ -96,14 +96,20 @@ const Price = styled.p`
     line-height: 24px; /* 171.429% */
 `;
 
-const StyleQuanityAndRate = styled.div`
+export const StyleQuanityAndRate = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
+
+    ${(props) =>
+        props.type === "left" &&
+        css`
+            justify-content: flex-start;
+        `}
 `;
 
-const Rate = styled.p`
+export const Rate = styled.p`
     color: var(--text-color-01, #0e1317);
 
     /* Tagline/05 */
@@ -112,7 +118,7 @@ const Rate = styled.p`
     line-height: 24px; /* 171.429% */
 `;
 
-const Quanity = styled.p`
+export const Quanity = styled.p`
     color: var(--text-color-02, #333334);
 
     /* Paragraph/03 */

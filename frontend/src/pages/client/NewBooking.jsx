@@ -16,29 +16,36 @@ const StyledContainer = styled.div`
     max-width: calc(100% - 50px);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1200px 372px;
+    grid-template-columns: 1000px 372px;
     gap: 30px;
 `;
 
 const StyledCol = styled.div`
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     gap: 30px;
 `;
 
 const Line = styled.div`
-    width: 1200px;
+    width: 1000px;
     margin: 10px 0px;
     height: 2px;
     background: var(--primary-color-01, #b89146);
 `;
 
-const ShortLine = styled.div`
+export const ShortLine = styled.div`
     width: 305px;
     margin: 0 auto;
     height: 1px;
     background: var(--primary-color-01, #b89146);
     margin-bottom: 15px;
+
+    ${(props) =>
+        props.type === "cost" &&
+        css`
+            width: 381px;
+        `}
 `;
 
 const StyledCost = styled.div`
@@ -134,7 +141,7 @@ const Paragraph = styled.p`
     margin: 10px 0 20px;
 `;
 
-const Cost = styled.div`
+export const Cost = styled.div`
     color: #222222;
     display: flex;
     grid-area: auto;

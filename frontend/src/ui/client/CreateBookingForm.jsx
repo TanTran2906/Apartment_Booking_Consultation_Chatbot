@@ -95,6 +95,11 @@ function CreateBookingForm() {
     }
 
     async function onSubmit(data) {
+        if (data.endDate <= data.startDate) {
+            return toast.error(
+                "Check-out date must be greater than Check-in date"
+            );
+        }
         if (!validateBookingDates(data.startDate, data.endDate))
             return toast.error(
                 `Cabin ${cabin.name} was booked during this time period. Please choose another time period!`
