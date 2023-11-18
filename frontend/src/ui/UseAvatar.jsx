@@ -31,7 +31,7 @@ function UserAvatar() {
     return (
         <>
             {isAdmin ? (
-                <Link to="admin/account">
+                <Link to="/account">
                     <StyledUserAvatar>
                         <Avatar
                             src={photo || "/default-user.jpg"}

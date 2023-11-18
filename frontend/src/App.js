@@ -31,6 +31,7 @@ import BookingInfo from "./pages/client/BookingInfo";
 import PaymentScreen from "./pages/client/PaymentScreen";
 import NewBooking from "./pages/client/NewBooking";
 import BookingScreen from "./pages/client/BookingScreen";
+import UserProfile from "./pages/client/UserProfile";
 
 //Tạo thể hiện của QueryClient
 const queryClient = new QueryClient({
@@ -98,7 +99,7 @@ function App() {
                 <Route path="/payment" element={<PaymentScreen />} />
                 <Route path="/booking" element={<NewBooking />} />
                 <Route path="/booking/:bookingId" element={<BookingScreen />} />
-                <Route path="/account" element={<Account />} />
+                <Route path="/account" element={<UserProfile />} />
               </Route>
             </Route>
 

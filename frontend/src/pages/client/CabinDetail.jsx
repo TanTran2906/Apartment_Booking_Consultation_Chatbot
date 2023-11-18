@@ -92,6 +92,7 @@ export const Description = styled.p`
 const Img = styled.img`
     margin: auto;
     width: 900px;
+    min-width: 900px;
     object-fit: cover; /* Đảm bảo hình ảnh điền đầy đối tượng không làm méo hoặc căng hình */
     object-position: center center; /* Canh giữa hình ảnh */
 `;

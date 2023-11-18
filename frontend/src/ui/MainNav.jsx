@@ -7,6 +7,8 @@ import {
     HiOutlineUsers,
 } from "react-icons/hi2";
 
+import { RxDashboard } from "react-icons/rx";
+
 import { FaServicestack } from "react-icons/fa";
 
 const NavList = styled.ul`
@@ -60,8 +62,8 @@ function MainNav() {
             <NavList>
                 <li>
                     <StyledNavLink to="/admin/dashboard">
-                        <HiOutlineHome />
-                        <span>Home</span>
+                        <RxDashboard />
+                        <span>Dashboard</span>
                     </StyledNavLink>
                 </li>
                 <li>
@@ -86,6 +88,13 @@ function MainNav() {
                     <StyledNavLink to="/admin/users">
                         <HiOutlineUsers />
                         <span>Users</span>
+                    </StyledNavLink>
+                </li>
+
+                <li>
+                    <StyledNavLink to="/home">
+                        <HiOutlineHome />
+                        <span>Home</span>
                     </StyledNavLink>
                 </li>
             </NavList>

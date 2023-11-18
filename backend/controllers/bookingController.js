@@ -187,19 +187,27 @@ export const updateBookingToPaid = asyncHandler(async (req, res, next) => {
 
     } else {
 
-        return next(new AppError('Booking could not be found', 404))
+        return next(new AppError('Booking could not be founded', 404))
     }
 });
 
 
 
-// @desc    Get logged in user orders
-// @route   GET /api/orders/myorders
+// @desc    Get logged in user bookings
+// @route   GET /api/bookings/mybookings
 // @access  Private
-// export const getMyBooings = asyncHandler(async (req, res, next) => {
-//     const orders = await Booking.find({ user: req.user._id });
-//     res.json(orders);
-// });
+export const getMyBooings = asyncHandler(async (req, res, next) => {
+    const bookings = await Booking.find({ user: req.user._id }).populate({
+        path: 'cabin',
+        select: 'name image',
+    });
+    if (bookings) {
+        res.status(200).json(bookings);
+    }
+    else {
+        return next(new AppError("Bookings could not be founded", 500))
+    }
+});
 
 
 

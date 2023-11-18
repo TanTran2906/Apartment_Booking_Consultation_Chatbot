@@ -15,6 +15,8 @@ const authUser = asyncHandler(async (req, res, next) => {
 
     if (user && (await user.matchPassword(password))) {
 
+        if (!user.active) return next(new AppError('The account is no longer active', 401))
+
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
@@ -36,6 +38,7 @@ const authUser = asyncHandler(async (req, res, next) => {
             photo: user?.photo,
             email: user.email,
             isAdmin: user.isAdmin,
+            active: user.active
         });
 
     } else {

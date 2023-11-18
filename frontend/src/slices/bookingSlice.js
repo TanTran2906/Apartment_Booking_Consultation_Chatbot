@@ -35,6 +35,13 @@ export const bookingSlice = apiSlice.injectEndpoints({
             }),
             keepUnusedDataFor: 5,
         }),
+        getMyBookings: builder.query({
+            query: () => ({
+                url: `${BOOKINGS_URL}/mybookings`,
+            }),
+            keepUnusedDataFor: 5,
+        }),
+
         updateCheckinBooking: builder.mutation({
             query: (bookingId) => ({
                 url: `${BOOKINGS_URL}/checkin/${bookingId}`,
@@ -79,4 +86,4 @@ export const bookingSlice = apiSlice.injectEndpoints({
 
 export const { useGetBookingsQuery, useGetBookingDetailsQuery, useUpdateCheckinBookingMutation,
     useUpdateCheckOutBookingMutation, useDeleteBookingMutation, useGetBookingsAfterDateQuery,
-    useGetStaysAfterDateQuery, useGetActivitiesQuery, useCreateBookingMutation, usePayBookingMutation, useGetPaypalClientIdQuery } = bookingSlice
+    useGetStaysAfterDateQuery, useGetActivitiesQuery, useCreateBookingMutation, usePayBookingMutation, useGetPaypalClientIdQuery, useGetMyBookingsQuery } = bookingSlice
