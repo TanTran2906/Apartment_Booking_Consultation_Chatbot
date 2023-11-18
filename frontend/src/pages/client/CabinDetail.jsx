@@ -10,10 +10,10 @@ import { useDispatch } from "react-redux";
 import { addToCabin } from "../../slices/bookingLocalStorage";
 
 const StyledContainer = styled.div`
-    width: 2550px;
-    max-width: calc(100% - 250px);
+    max-width: calc(100% - 100px);
     margin: 0 auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: 25% 75%;
     gap: 30px;
 `;
 
@@ -22,7 +22,7 @@ const StyledBooknow = styled.div`
     display: grid;
     grid-template-rows: 20% 20% 25% 35%;
     grid-template-columns: 100%;
-    width: 450px;
+    width: 330px;
     height: 347px;
     border: 1px solid var(--text-color-01, rgba(14, 19, 23, 0.1));
     padding: 30px 48px 30px 30px;

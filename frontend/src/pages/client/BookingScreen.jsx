@@ -1,14 +1,31 @@
 import styled, { css } from "styled-components";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { Quanity, Rate, StyleQuanityAndRate } from "../../ui/client/CabinItem";
 import { Cost, ShortLine } from "./NewBooking";
 import { useParams } from "react-router-dom";
-import { useGetBookingDetailsQuery } from "../../slices/bookingSlice";
+import {
+    useGetBookingDetailsQuery,
+    useGetPaypalClientIdQuery,
+    usePayBookingMutation,
+} from "../../slices/bookingSlice";
 import Spinner from "../../ui/Spinner";
 import { IoDiamondOutline } from "react-icons/io5";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaPeopleRoof } from "react-icons/fa6";
-import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
-import { da } from "date-fns/locale";
+import { formatCurrency } from "../../utils/helpers";
+import { useEffect } from "react";
+
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import SpinnerMini from "../../ui/SpinnerMini";
+import DataItem from "../../ui/DataItem";
+import { Flag } from "../../ui/Flag";
+import {
+    HiOutlineChatBubbleBottomCenterText,
+    HiOutlineCheckCircle,
+    HiOutlineCurrencyDollar,
+} from "react-icons/hi2";
 
 const StyledContainer = styled.div`
     max-width: calc(100% - 300px);
@@ -19,10 +36,11 @@ const StyledContainer = styled.div`
 `;
 
 const StyledCost = styled.div`
+    height: fit-content;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     color: #222222;
     grid-area: auto;
     line-height: 20px;
@@ -51,7 +69,7 @@ const Heading = styled.h1`
 const ColLetf = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 `;
 
 const Attraction = styled.div`
@@ -117,6 +135,10 @@ const Icon = styled.div`
     min-width: 40px;
     min-height: 40px;
     font-size: 3rem;
+
+    & svg {
+        color: #e31c5f;
+    }
 `;
 
 const StyledCabin = styled.div`
@@ -132,17 +154,122 @@ const Img = styled.img`
     object-position: center center; /* Canh giữa hình ảnh */
 `;
 
+const Section = styled.section`
+    /* padding: 3.2rem 4rem 1.2rem; */
+`;
+
+const Price = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.6rem 3.2rem;
+    border-radius: var(--border-radius-sm);
+    margin-top: 2.4rem;
+
+    background-color: ${(props) =>
+        props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    color: ${(props) =>
+        props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+
+    & p:last-child {
+        text-transform: uppercase;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    svg {
+        height: 2.4rem;
+        width: 2.4rem;
+        color: currentColor !important;
+    }
+`;
+
 function BookingScreen() {
     const { bookingId } = useParams();
+    // const { userInfo } = useSelector((state) => state.auth);
 
-    const { data, isLoading } = useGetBookingDetailsQuery(bookingId);
+    const {
+        data: booking,
+        refetch,
+        isLoading,
+    } = useGetBookingDetailsQuery(bookingId);
+    const [payBooking, { isLoading: isPaying }] = usePayBookingMutation();
+
+    const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+    const {
+        data: paypal,
+        isLoading: loadingPayPal,
+        error: errorPayPal,
+    } = useGetPaypalClientIdQuery();
+
+    useEffect(() => {
+        if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+            const loadPaypalScript = async () => {
+                paypalDispatch({
+                    type: "resetOptions",
+                    value: {
+                        "client-id": paypal.clientId,
+                        currency: "USD",
+                    },
+                });
+                paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+            };
+            if (booking && !booking.isPaid) {
+                if (!window.paypal) {
+                    loadPaypalScript();
+                }
+            }
+        }
+    }, [errorPayPal, loadingPayPal, booking, paypal, paypalDispatch]);
+
+    function onApprove(data, actions) {
+        return actions.order.capture().then(async function (details) {
+            try {
+                await payBooking({ bookingId, details });
+                refetch();
+                toast.success("Booking is successfully paid");
+            } catch (err) {
+                toast.error(err?.data?.message || err.error);
+            }
+        });
+    }
+
+    //Thanh toán fake
+    // async function onApproveTest() {
+    //     await payBooking({ bookingId, details: { payer: {} } });
+    //     refetch();
+
+    //     toast.success("Booking is successfully paid");
+    // }
+
+    function onError(err) {
+        toast.error(err.message);
+    }
+
+    //Tạo một đơn hàng PayPal
+    function createOrder(data, actions) {
+        return actions.order
+            .create({
+                purchase_units: [
+                    {
+                        amount: { value: booking.totalPrice },
+                    },
+                ],
+            })
+            .then((orderID) => {
+                return orderID;
+            });
+    }
 
     if (isLoading) return <Spinner />;
 
-    const servicesPrice = data.services.reduce(
+    const servicesPrice = booking.services.reduce(
         (acc, service) => acc + (service.regularPrice - service.discount),
         0
     );
+
+    const hasServices = Boolean(booking.services.length);
 
     return (
         <>
@@ -169,13 +296,13 @@ function BookingScreen() {
                             <Paragraph>
                                 {"From "}
                                 {
-                                    new Date(data.startDate)
+                                    new Date(booking.startDate)
                                         .toISOString()
                                         .split("T")[0]
                                 }{" "}
                                 {"to"}{" "}
                                 {
-                                    new Date(data.endDate)
+                                    new Date(booking.endDate)
                                         .toISOString()
                                         .split("T")[0]
                                 }
@@ -189,19 +316,76 @@ function BookingScreen() {
                     <Guest>
                         <div>
                             <Title>Guests</Title>
-                            <Paragraph>{data.numGuests} guest</Paragraph>
+                            <Paragraph>{booking.numGuests} guest</Paragraph>
                         </div>
                         <Icon>
                             <FaPeopleRoof />
                         </Icon>
                     </Guest>
+
+                    <Section>
+                        {booking.observations && (
+                            <DataItem
+                                icon={<HiOutlineChatBubbleBottomCenterText />}
+                                label="Observations"
+                            >
+                                {booking.observations}
+                            </DataItem>
+                        )}
+
+                        <DataItem
+                            icon={<HiOutlineCheckCircle />}
+                            label="Services included?"
+                        >
+                            {hasServices ? "Yes" : "No"}
+                        </DataItem>
+
+                        <Price isPaid={booking.isPaid}>
+                            <DataItem
+                                icon={<HiOutlineCurrencyDollar />}
+                                label={`Total price`}
+                            >
+                                {formatCurrency(booking.totalPrice)}
+
+                                {hasServices && (
+                                    <>
+                                        {" ("}
+                                        {formatCurrency(
+                                            (booking.cabin.regularPrice -
+                                                booking.cabin.discount) *
+                                                booking.numNights
+                                        )}{" "}
+                                        cabin +{" "}
+                                        {booking.services
+                                            .map(
+                                                (service) =>
+                                                    `${formatCurrency(
+                                                        (service.regularPrice -
+                                                            service.discount) *
+                                                            booking.numGuests *
+                                                            booking.numNights
+                                                    )} ${service.name}`
+                                            )
+                                            .join(" + ")}
+                                        {")"}
+                                    </>
+                                )}
+                            </DataItem>
+
+                            <p>
+                                {booking.isPaid
+                                    ? "Paid"
+                                    : "Will pay at property"}
+                            </p>
+                        </Price>
+                    </Section>
                 </ColLetf>
                 <StyledCost>
                     <StyledCabin>
-                        <Img src="/cabins/cabin-001.jpg" />
+                        <Img src={booking.cabin.image} />
                         <div>
                             <Paragraph type="room-in">
-                                Cabin {data.cabin.name}
+                                Cabin {booking.cabin.name}
                             </Paragraph>
                             <Paragraph type="desc">
                                 Enjoy the fresh air and mysterious natural
@@ -221,9 +405,9 @@ function BookingScreen() {
                                         fill="#B89146"
                                     />
                                 </svg>
-                                <Rate>{data.cabin.ratingsAverage}</Rate>
+                                <Rate>{booking.cabin.ratingsAverage}</Rate>
                                 <Quanity>
-                                    ({data.cabin.ratingQuantity} reviews)
+                                    ({booking.cabin.ratingQuantity} reviews)
                                 </Quanity>
                             </StyleQuanityAndRate>
                         </div>
@@ -236,15 +420,16 @@ function BookingScreen() {
                     <Cost>
                         <span>
                             {formatCurrency(
-                                data.cabin.regularPrice - data.cabin.discount
+                                booking.cabin.regularPrice -
+                                    booking.cabin.discount
                             )}{" "}
-                            x {data.numNights} Nights:
+                            x {booking.numNights} Nights:
                         </span>
                         <span>
                             {formatCurrency(
-                                (data.cabin.regularPrice -
-                                    data.cabin.discount) *
-                                    data.numNights
+                                (booking.cabin.regularPrice -
+                                    booking.cabin.discount) *
+                                    booking.numNights
                             )}
                         </span>
                     </Cost>
@@ -254,8 +439,8 @@ function BookingScreen() {
                         <span>
                             {formatCurrency(
                                 servicesPrice *
-                                    data.numGuests *
-                                    data.numNights || 0
+                                    booking.numGuests *
+                                    booking.numNights || 0
                             )}
                         </span>
                     </Cost>
@@ -264,8 +449,36 @@ function BookingScreen() {
 
                     <Cost type="total">
                         <span>Total price:</span>
-                        <span>{formatCurrency(data.totalPrice)}</span>
+                        <span>{formatCurrency(booking.totalPrice)}</span>
                     </Cost>
+
+                    {/* PAY ORDER PLACEHOLDER */}
+                    {!booking.isPaid && (
+                        <ListGroup.Item>
+                            {isPaying && <SpinnerMini />}
+
+                            {isPending ? (
+                                <SpinnerMini />
+                            ) : (
+                                <div>
+                                    {/* <Button
+                                                style={{ marginBottom: "10px" }}
+                                                onClick={onApproveTest}
+                                            >
+                                                Test Pay Order
+                                            </Button> */}
+
+                                    <div>
+                                        <PayPalButtons
+                                            createOrder={createOrder}
+                                            onApprove={onApprove}
+                                            onError={onError}
+                                        ></PayPalButtons>
+                                    </div>
+                                </div>
+                            )}
+                        </ListGroup.Item>
+                    )}
                 </StyledCost>
             </StyledContainer>
         </>

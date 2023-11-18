@@ -1,4 +1,4 @@
-import { BOOKINGS_URL } from '../utils/constants.js';
+import { BOOKINGS_URL, PAYPAL_URL } from '../utils/constants.js';
 import { apiSlice } from './apiSlice.js';
 
 export const bookingSlice = apiSlice.injectEndpoints({
@@ -22,7 +22,19 @@ export const bookingSlice = apiSlice.injectEndpoints({
                 body: { ...booking },
             }),
         }),
-
+        payBooking: builder.mutation({
+            query: ({ bookingId, details }) => ({
+                url: `${BOOKINGS_URL}/${bookingId}/pay`,
+                method: 'PUT',
+                body: details
+            }),
+        }),
+        getPaypalClientId: builder.query({
+            query: () => ({
+                url: PAYPAL_URL,
+            }),
+            keepUnusedDataFor: 5,
+        }),
         updateCheckinBooking: builder.mutation({
             query: (bookingId) => ({
                 url: `${BOOKINGS_URL}/checkin/${bookingId}`,
@@ -67,4 +79,4 @@ export const bookingSlice = apiSlice.injectEndpoints({
 
 export const { useGetBookingsQuery, useGetBookingDetailsQuery, useUpdateCheckinBookingMutation,
     useUpdateCheckOutBookingMutation, useDeleteBookingMutation, useGetBookingsAfterDateQuery,
-    useGetStaysAfterDateQuery, useGetActivitiesQuery, useCreateBookingMutation } = bookingSlice
+    useGetStaysAfterDateQuery, useGetActivitiesQuery, useCreateBookingMutation, usePayBookingMutation, useGetPaypalClientIdQuery } = bookingSlice

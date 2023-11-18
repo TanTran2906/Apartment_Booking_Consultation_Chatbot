@@ -11,6 +11,7 @@ import { useCreateBookingMutation } from "../../slices/bookingSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearServiceItems } from "../../slices/bookingLocalStorage";
+import CheckoutSteps from "../../ui/client/CheckoutSteps";
 
 const StyledContainer = styled.div`
     max-width: calc(100% - 50px);
@@ -213,8 +214,6 @@ function NewBooking() {
                 (yourCabin.regularPrice - yourCabin.discount) * numNights +
                 (servicesPrice * infomation.numGuests * numNights || 0);
 
-            console.log(user, cabin);
-
             const res = await createBooking({
                 services,
                 user,
@@ -231,96 +230,101 @@ function NewBooking() {
             navigate(`/booking/${res._id}`);
             toast.success("Booking successfully created");
         } catch (err) {
-            console.log(err);
             toast.error(err?.data?.message || err.error);
         }
     };
 
     return (
-        <StyledContainer>
-            <StyledCol>
-                <Heading as="h1">Your cabin</Heading>
-                <CabinTable />
-                <Line />
+        <>
+            <CheckoutSteps step1 step2 step3 step4 />
+            <StyledContainer>
+                <StyledCol>
+                    <Heading as="h1">Your cabin</Heading>
+                    <CabinTable />
+                    <Line />
 
-                <Heading as="h1">Choose services (Optional)</Heading>
-                <ServiceTable />
-                <Line />
-            </StyledCol>
+                    <Heading as="h1">Choose services (Optional)</Heading>
+                    <ServiceTable />
+                    <Line />
+                </StyledCol>
 
-            <StyledCost>
-                <StyledInfo>
-                    <StyledInfomation>
-                        <CabinPrice>
-                            <Span type="price">
-                                {formatCurrency(
-                                    yourCabin.regularPrice - yourCabin.discount
-                                )}{" "}
-                            </Span>
-                            <Span type="text">Night</Span>
-                        </CabinPrice>
+                <StyledCost>
+                    <StyledInfo>
+                        <StyledInfomation>
+                            <CabinPrice>
+                                <Span type="price">
+                                    {formatCurrency(
+                                        yourCabin.regularPrice -
+                                            yourCabin.discount
+                                    )}{" "}
+                                </Span>
+                                <Span type="text">Night</Span>
+                            </CabinPrice>
 
-                        <GridContainer>
-                            <InfoBooking type="top-left">
-                                <b>CHECK-IN </b>{" "}
-                                <div>{infomation.startDate}</div>
-                            </InfoBooking>
-                            <InfoBooking type="top-right">
-                                <b>CHECK-OUT</b> <div>{infomation.endDate}</div>
-                            </InfoBooking>
-                            <InfoBooking type="bottom-left-right">
-                                <b>GUESTS</b>{" "}
-                                <div>{infomation.numGuests} guest</div>
-                            </InfoBooking>
-                        </GridContainer>
+                            <GridContainer>
+                                <InfoBooking type="top-left">
+                                    <b>CHECK-IN </b>{" "}
+                                    <div>{infomation.startDate}</div>
+                                </InfoBooking>
+                                <InfoBooking type="top-right">
+                                    <b>CHECK-OUT</b>{" "}
+                                    <div>{infomation.endDate}</div>
+                                </InfoBooking>
+                                <InfoBooking type="bottom-left-right">
+                                    <b>GUESTS</b>{" "}
+                                    <div>{infomation.numGuests} guest</div>
+                                </InfoBooking>
+                            </GridContainer>
 
-                        <Button
-                            size="large"
-                            onClick={reserveHandler}
-                            // disabled={isLoading}
-                        >
-                            Reserve
-                        </Button>
+                            <Button
+                                size="large"
+                                onClick={reserveHandler}
+                                // disabled={isLoading}
+                            >
+                                Reserve
+                            </Button>
 
-                        <Paragraph>You won't be charged yet</Paragraph>
+                            <Paragraph>You won't be charged yet</Paragraph>
 
-                        <Cost>
-                            <span>
-                                {formatCurrency(
-                                    yourCabin.regularPrice - yourCabin.discount
-                                )}{" "}
-                                x {numNights} Nights:
-                            </span>
-                            <span>
-                                {formatCurrency(
-                                    (yourCabin.regularPrice -
-                                        yourCabin.discount) *
-                                        numNights
-                                )}
-                            </span>
-                        </Cost>
+                            <Cost>
+                                <span>
+                                    {formatCurrency(
+                                        yourCabin.regularPrice -
+                                            yourCabin.discount
+                                    )}{" "}
+                                    x {numNights} Nights:
+                                </span>
+                                <span>
+                                    {formatCurrency(
+                                        (yourCabin.regularPrice -
+                                            yourCabin.discount) *
+                                            numNights
+                                    )}
+                                </span>
+                            </Cost>
 
-                        <Cost>
-                            <span>Services fee:</span>
-                            <span>
-                                {formatCurrency(
-                                    servicesPrice *
-                                        infomation.numGuests *
-                                        numNights || 0
-                                )}
-                            </span>
-                        </Cost>
+                            <Cost>
+                                <span>Services fee:</span>
+                                <span>
+                                    {formatCurrency(
+                                        servicesPrice *
+                                            infomation.numGuests *
+                                            numNights || 0
+                                    )}
+                                </span>
+                            </Cost>
 
-                        <ShortLine />
+                            <ShortLine />
 
-                        <Cost type="total">
-                            <span>Total price:</span>
-                            <span>{total}</span>
-                        </Cost>
-                    </StyledInfomation>
-                </StyledInfo>
-            </StyledCost>
-        </StyledContainer>
+                            <Cost type="total">
+                                <span>Total price:</span>
+                                <span>{total}</span>
+                            </Cost>
+                        </StyledInfomation>
+                    </StyledInfo>
+                </StyledCost>
+            </StyledContainer>
+        </>
     );
 }
 

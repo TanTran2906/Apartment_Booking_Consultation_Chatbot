@@ -14,6 +14,7 @@ import Button from "../../ui/Button";
 import { toast } from "react-hot-toast";
 import { savePaymentMethod } from "../../slices/bookingLocalStorage";
 import Heading from "../../ui/Heading";
+import CheckoutSteps from "../../ui/client/CheckoutSteps";
 
 const StyledContainer = styled.div`
     width: 2990px;
@@ -91,59 +92,37 @@ const PaymentScreen = () => {
     }
 
     return (
-        <StyledContainer>
-            <Heading as="h1">Payment Methods </Heading>
-            <Form onSubmit={handleSubmit(onSubmit, onError)}>
-                <FormRow>
-                    <Label htmlFor="PayPal">PayPal or Credit Card</Label>
-                    <Input
-                        type="radio"
-                        id="PayPal"
-                        checked
-                        defaultValue="PayPal"
-                        {...register("PayPal", {
-                            required: "This field is required",
-                        })}
-                    />
-                    {errors?.PayPal?.message && (
-                        <Error>{errors.PayPal.message}</Error>
-                    )}
-                </FormRow>
+        <>
+            <CheckoutSteps step1 step2 step3 />
+            <StyledContainer>
+                <Heading as="h1">Payment Methods </Heading>
+                <Form onSubmit={handleSubmit(onSubmit, onError)}>
+                    <FormRow>
+                        <Label htmlFor="PayPal">PayPal or Credit Card</Label>
+                        <Input
+                            type="radio"
+                            id="PayPal"
+                            checked
+                            defaultValue="PayPal"
+                            {...register("PayPal", {
+                                required: "This field is required",
+                            })}
+                        />
+                        {errors?.PayPal?.message && (
+                            <Error>{errors.PayPal.message}</Error>
+                        )}
+                    </FormRow>
 
-                <FormRow>
-                    {/* type is an HTML attribute! */}
-                    {/* <Button variation="secondary" type="reset">
+                    <FormRow>
+                        {/* type is an HTML attribute! */}
+                        {/* <Button variation="secondary" type="reset">
                 Cancel
             </Button> */}
-                    <Button>Continue</Button>
-                </FormRow>
-            </Form>
-        </StyledContainer>
-        // <FormContainer>
-        //     {/* <CheckoutSteps step1 step2 step3 /> */}
-        //     <h1>Payment Method</h1>
-        //     <Form onSubmit={submitHandler}>
-        //         <Form.Group>
-        //             <Form.Label as="legend">Select Method</Form.Label>
-        //             <Col>
-        //                 <Form.Check
-        //                     className="my-2"
-        //                     type="radio"
-        //                     label="PayPal or Credit Card"
-        //                     id="PayPal"
-        //                     name="paymentMethod"
-        //                     value="PayPal"
-        //                     checked
-        //                     onChange={(e) => setPaymentMethod(e.target.value)}
-        //                 ></Form.Check>
-        //             </Col>
-        //         </Form.Group>
-
-        //         <Button type="submit" variant="primary">
-        //             Continue
-        //         </Button>
-        //     </Form>
-        // </FormContainer>
+                        <Button>Continue</Button>
+                    </FormRow>
+                </Form>
+            </StyledContainer>
+        </>
     );
 };
 

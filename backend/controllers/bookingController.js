@@ -139,19 +139,6 @@ export const addBooking = asyncHandler(async (req, res, next) => {
         observations
     } = req.body;
 
-    // console.log({
-    //     services,
-    //     user,
-    //     cabin,
-    //     paymentMethod,
-    //     totalPrice,
-    //     numNights,
-    //     numGuests,
-    //     startDate,
-    //     endDate,
-    //     observations
-    // })
-
     const booking = new Booking({
         services: services.map((x) => ({
             _id: x._id,
@@ -168,8 +155,6 @@ export const addBooking = asyncHandler(async (req, res, next) => {
         observations
     });
 
-    console.log(booking)
-
     if (booking) {
         const createdBooking = await booking.save();
 
@@ -179,6 +164,33 @@ export const addBooking = asyncHandler(async (req, res, next) => {
     }
 
 })
+
+// @desc    Update booking to paid
+// @route   PUT /api/bookings/:id/pay
+// @access  Private
+export const updateBookingToPaid = asyncHandler(async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+
+    if (booking) {
+        booking.isPaid = true;
+        booking.paidAt = Date.now();
+        booking.paymentResult = {
+            id: req.body.id,
+            status: req.body.status,
+            update_time: req.body.update_time,
+            email_address: req.body.payer.email_address,
+        };
+
+        const updatedBooking = await booking.save();
+
+        res.status(200).json(updatedBooking);
+
+    } else {
+
+        return next(new AppError('Booking could not be found', 404))
+    }
+});
+
 
 
 // @desc    Get logged in user orders
