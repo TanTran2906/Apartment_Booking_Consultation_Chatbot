@@ -145,3 +145,42 @@ export const searchCabins = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Create new review
+// @route   POST /api/cabins/:id/reviews
+// @access  Private
+export const createCabinReview = asyncHandler(async (req, res) => {
+    const { rating, comment } = req.body;
+
+    const cabin = await Cabin.findById(req.params.id);
+
+    if (cabin) {
+        const alreadyReviewed = cabin.reviews.find(
+            (r) => r.user.toString() === req.user._id.toString()
+        );
+
+        if (alreadyReviewed) {
+            return next(new AppError('Cabin already reviewed', 400))
+        }
+
+        const review = {
+            name: req.user.fullName,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        };
+
+        cabin.reviews.push(review);
+
+        //+1 do khởi tạo ban đầu khi tạo mới cabin, 4.6 cũng vậy
+        cabin.ratingQuantity = cabin.reviews.length + 1;
+
+        cabin.ratingsAverage =
+            cabin.reviews.reduce((acc, item) => item.rating + acc, 4.6) /
+            (cabin.reviews.length + 1);
+
+        await cabin.save();
+        res.status(201).json({ message: 'Review added' });
+    } else {
+        return next(new AppError('Cabin not found', 404))
+    }
+});

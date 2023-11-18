@@ -29,10 +29,11 @@ import Empty from "../Empty";
 // `;
 
 function BookingHistoryTable() {
-    const { data: mybookings, isLoading } = useGetMyBookingsQuery();
+    const { data: mybookings = [], isLoading } = useGetMyBookingsQuery();
 
     if (isLoading) return <Spinner />;
-    if (mybookings.length === 0) return <Empty resource="booking" />;
+
+    if (mybookings?.length === 0) return <Empty resource="booking" />;
 
     return (
         <Menus>

@@ -14,7 +14,7 @@ const Question = styled.div`
 `;
 
 const LongLine = styled.div`
-    width: 960px;
+    width: 900px;
     height: 1px;
     background: #d9d9d9;
 `;

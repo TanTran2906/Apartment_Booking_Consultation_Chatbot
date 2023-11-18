@@ -52,9 +52,17 @@ export const cabinSlice = apiSlice.injectEndpoints({
             query: ({ name }) => `${CABINS_URL}/search/${name}`,
             providesTags: ['Cabin'],
         }),
+        createReview: builder.mutation({
+            query: (data) => ({
+                url: `${CABINS_URL}/${data.cabinId}/reviews`,
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Cabin'],
+        }),
 
     }),
 });
 
 //useGetCabinsQuery bản chất nó là getCabins
-export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation, useUpdateCabinMutation, useUploadCabinImageMutation, useGetTopCabinsQuery, useSearchCabinsQuery } = cabinSlice;
+export const { useGetCabinsQuery, useGetCabinDetailsQuery, useDeleteCabinMutation, useCreateCabinMutation, useUpdateCabinMutation, useUploadCabinImageMutation, useGetTopCabinsQuery, useSearchCabinsQuery, useCreateReviewMutation } = cabinSlice;
