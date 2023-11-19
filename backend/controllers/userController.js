@@ -18,7 +18,8 @@ const authUser = asyncHandler(async (req, res, next) => {
         if (!user.active) return next(new AppError('The account is no longer active', 401))
 
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+            // expiresIn: '1h',
+            expiresIn: '24h', //For test
         });
 
         // Set JWT as an HTTP-Only cookie
@@ -26,7 +27,8 @@ const authUser = asyncHandler(async (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
             sameSite: 'strict', // Prevent CSRF attacks
-            maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+            // maxAge: 60 * 60 * 1000, // 1 hour in milliseconds 
+            maxAge: 24 * 60 * 60 * 1000, // 24 hour in milliseconds for test
         });
 
         res.json({

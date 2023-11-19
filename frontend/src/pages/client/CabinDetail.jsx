@@ -15,6 +15,9 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { ListGroup, Form, Col } from "react-bootstrap";
 import Message from "../../ui/Message";
+import { FaRegSmileWink } from "react-icons/fa";
+import Rating from "../../ui/client/Rating";
+import { formatDistanceFromNow } from "../../utils/helpers";
 
 const StyledContainer = styled.div`
     max-width: calc(100% - 48px);
@@ -72,7 +75,6 @@ const Avatar = styled.img`
 
 const Paragraph = styled.p`
     color: #222222;
-    margin-top: 3px;
     /* line-height: 20px; */
 
     ${(props) =>
@@ -92,6 +94,8 @@ const Paragraph = styled.p`
 const StyleRating = styled.div`
     color: #222222;
     display: flex;
+    gap: 5px;
+    align-items: center;
     font-size: 1.4rem;
     font-weight: 600;
     line-height: 18px;
@@ -162,6 +166,36 @@ const Img = styled.img`
     min-width: 840px;
     object-fit: cover; /* Đảm bảo hình ảnh điền đầy đối tượng không làm méo hoặc căng hình */
     object-position: center center; /* Canh giữa hình ảnh */
+`;
+
+const StyledListGroupItem = styled(ListGroup.Item)`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const StyledForm = styled(Form)`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const FormRow = styled(Form.Group)`
+    display: flex;
+`;
+
+const Label = styled.div`
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    margin-right: 20px;
+    min-width: 100px;
+`;
+
+const Input = styled(Form.Control)`
+    display: inline-block;
+    width: 350px;
+    min-width: 300px;
 `;
 
 function CabinDetail() {
@@ -272,92 +306,89 @@ function CabinDetail() {
                 {cabin.reviews.length === 0 && <Empty resource="review" />}
 
                 <StyleReviews>
-                    <Review>
-                        <User>
-                            <Avatar src="/cabins/cabin-001.jpg" />
-                            <div>
-                                <Paragraph type="heading">Hi</Paragraph>
-                                <Paragraph type="desc">Hello</Paragraph>
-                            </div>
-                        </User>
-                        <StyleRating>
-                            <Paragraph>Hi</Paragraph>
-                            <Paragraph type="heading">Hi</Paragraph>
-                        </StyleRating>
+                    {cabin.reviews.map((review) => (
+                        <Review key={review.name}>
+                            <User>
+                                <Avatar src={review.avatar} />
+                                <div>
+                                    <Paragraph type="heading">
+                                        {review.name}
+                                    </Paragraph>
+                                    <Paragraph type="desc">
+                                        {review.nationality}
+                                    </Paragraph>
+                                </div>
+                            </User>
+                            <StyleRating>
+                                <Paragraph>
+                                    <div>
+                                        <Rating value={review.rating} />
+                                    </div>
+                                </Paragraph>
+                                <Paragraph type="heading">
+                                    {review?.createAt?.substring(0, 10)}
+                                </Paragraph>
+                            </StyleRating>
 
-                        <Paragraph type="desc">
-                            The finest quality wood, a comfortable living area,
-                            a fireplace, and a fully-equipped gourmet kitchen.
-                        </Paragraph>
-                    </Review>
+                            <Paragraph type="desc">{review.comment}</Paragraph>
+                        </Review>
+                    ))}
                 </StyleReviews>
 
-                <Col md={6}>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>
-                            <h2>Write a Customer Review</h2>
+                <ListGroup variant="flush">
+                    <StyledListGroupItem>
+                        <h2>Write a Customer Review</h2>
 
-                            {loadingProductReview && <Spinner />}
+                        {loadingProductReview && <Spinner />}
 
-                            {userInfo ? (
-                                <Form onSubmit={submitHandler}>
-                                    <Form.Group
-                                        className="my-2"
-                                        controlId="rating"
+                        {userInfo ? (
+                            <StyledForm onSubmit={submitHandler}>
+                                <FormRow className="my-2" controlId="rating">
+                                    <Label>Rating</Label>
+                                    <Input
+                                        as="select"
+                                        required
+                                        value={rating}
+                                        onChange={(e) =>
+                                            setRating(e.target.value)
+                                        }
                                     >
-                                        <Form.Label>Rating</Form.Label>
-                                        <Form.Control
-                                            as="select"
-                                            required
-                                            value={rating}
-                                            onChange={(e) =>
-                                                setRating(e.target.value)
-                                            }
-                                        >
-                                            <option value="">Select...</option>
-                                            <option value="1">1 - Poor</option>
-                                            <option value="2">2 - Fair</option>
-                                            <option value="3">3 - Good</option>
-                                            <option value="4">
-                                                4 - Very Good
-                                            </option>
-                                            <option value="5">
-                                                5 - Excellent
-                                            </option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <Form.Group
-                                        className="my-2"
-                                        controlId="comment"
-                                    >
-                                        <Form.Label>Comment</Form.Label>
-                                        <Form.Control
-                                            as="textarea"
-                                            row="3"
-                                            required
-                                            value={comment}
-                                            onChange={(e) =>
-                                                setComment(e.target.value)
-                                            }
-                                        ></Form.Control>
-                                    </Form.Group>
-                                    <Button
-                                        disabled={loadingProductReview}
-                                        type="submit"
-                                        variant="primary"
-                                    >
-                                        Submit
-                                    </Button>
-                                </Form>
-                            ) : (
-                                <Message>
-                                    Please <Link to="/login">sign in</Link> to
-                                    write a review
-                                </Message>
-                            )}
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Col>
+                                        <option value="">Select...</option>
+                                        <option value="1">1 - Poor</option>
+                                        <option value="2">2 - Fair</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="4">4 - Very Good</option>
+                                        <option value="5">5 - Excellent</option>
+                                    </Input>
+                                </FormRow>
+                                <FormRow className="my-2" controlId="comment">
+                                    <Label>Comment</Label>
+                                    <Input
+                                        as="textarea"
+                                        row="8"
+                                        required
+                                        value={comment}
+                                        onChange={(e) =>
+                                            setComment(e.target.value)
+                                        }
+                                    ></Input>
+                                </FormRow>
+                                <Button
+                                    disabled={loadingProductReview}
+                                    type="submit"
+                                    variant="primary"
+                                >
+                                    Submit
+                                </Button>
+                            </StyledForm>
+                        ) : (
+                            <Message>
+                                Please <Link to="/login">sign in</Link> to write
+                                a review !
+                            </Message>
+                        )}
+                    </StyledListGroupItem>
+                </ListGroup>
             </StyleColLeft>
 
             <StyleCabinDetail>

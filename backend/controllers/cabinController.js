@@ -148,8 +148,8 @@ export const searchCabins = asyncHandler(async (req, res) => {
 // @desc    Create new review
 // @route   POST /api/cabins/:id/reviews
 // @access  Private
-export const createCabinReview = asyncHandler(async (req, res) => {
-    const { rating, comment } = req.body;
+export const createCabinReview = asyncHandler(async (req, res, next) => {
+    const { rating, comment, avatar } = req.body;
 
     const cabin = await Cabin.findById(req.params.id);
 
@@ -166,6 +166,8 @@ export const createCabinReview = asyncHandler(async (req, res) => {
             name: req.user.fullName,
             rating: Number(rating),
             comment,
+            avatar: req.user.photo,
+            nationality: req.user.nationality,
             user: req.user._id,
         };
 

@@ -5,6 +5,12 @@ const reviewSchema = mongoose.Schema(
         name: { type: String, required: true },
         rating: { type: Number, required: true },
         comment: { type: String, required: true },
+        avatar: { type: String },
+        nationality: { type: String },
+        createAt: {
+            type: Date,
+            default: Date.now,
+        },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
