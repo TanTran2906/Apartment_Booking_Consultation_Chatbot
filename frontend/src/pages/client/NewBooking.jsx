@@ -17,12 +17,12 @@ const StyledContainer = styled.div`
     max-width: calc(100% - 50px);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1000px 372px;
+    grid-template-columns: 1150px 372px;
     gap: 30px;
 `;
 
 const StyledCol = styled.div`
-    max-width: 1000px;
+    max-width: 1150px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -236,7 +236,7 @@ function NewBooking() {
 
     return (
         <>
-            <CheckoutSteps step1 step2 step3 step4 />
+            <CheckoutSteps step1 step2 step3 step4 currentStep={4}/>
             <StyledContainer>
                 <StyledCol>
                     <Heading as="h1">Your cabin</Heading>

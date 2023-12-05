@@ -3,6 +3,8 @@ import Footer from "./Footer";
 import Header from "./Header";
 // import { Container } from "react-bootstrap";
 import styled from "styled-components";
+// import { useDarkMode } from "../../context/DarkModeContext";
+// import { useEffect } from "react";
 
 const Main = styled.main`
     background-color: #fffaf5;
@@ -14,6 +16,12 @@ const StyleApp = styled.div`
 `;
 
 function ClientLayout() {
+    // const { isDarkMode, toggleDarkMode } = useDarkMode();
+    
+    // useEffect(function(){
+    //     if(isDarkMode) toggleDarkMode();
+    // },[isDarkMode,toggleDarkMode])
+
     return (
         <StyleApp>
             <Header />

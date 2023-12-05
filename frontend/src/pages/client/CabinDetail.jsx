@@ -373,13 +373,17 @@ function CabinDetail() {
                                         }
                                     ></Input>
                                 </FormRow>
-                                <Button
+                                <FormRow className="my-2" controlId="comment">
+                                    <Label></Label>
+                                    <Button
                                     disabled={loadingProductReview}
                                     type="submit"
                                     variant="primary"
                                 >
                                     Submit
-                                </Button>
+                                    </Button>
+                                </FormRow>
+                                
                             </StyledForm>
                         ) : (
                             <Message>

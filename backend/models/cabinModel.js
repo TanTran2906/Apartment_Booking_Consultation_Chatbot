@@ -24,11 +24,6 @@ const reviewSchema = mongoose.Schema(
 
 const cabinSchema = mongoose.Schema(
     {
-        // user: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     required: true,
-        //     ref: 'User',
-        // },
         name: {
             type: String,
             required: [true, 'A cabin must be have a name'],

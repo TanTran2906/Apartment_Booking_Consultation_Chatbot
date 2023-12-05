@@ -93,7 +93,7 @@ const PaymentScreen = () => {
 
     return (
         <>
-            <CheckoutSteps step1 step2 step3 />
+            <CheckoutSteps step1 step2 step3 currentStep={3}/>
             <StyledContainer>
                 <Heading as="h1">Payment Methods </Heading>
                 <Form onSubmit={handleSubmit(onSubmit, onError)}>

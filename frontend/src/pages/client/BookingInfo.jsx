@@ -29,7 +29,7 @@ function BookingInfo() {
 
     return (
         <>
-            <CheckoutSteps step1 step2 />
+            <CheckoutSteps step1 step2 currentStep={2}/>
             <StyledContainer>
                 <Heading as="h1">Information </Heading>
                 <CreateBookingForm />

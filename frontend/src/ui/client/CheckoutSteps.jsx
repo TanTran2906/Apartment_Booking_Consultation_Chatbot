@@ -41,19 +41,27 @@ const StyledNavLink = styled(Nav.Link)`
         border-color: #333;
     }
 
+    &.completed {
+        color: #fff;
+        background-color: #333;
+        border-color: #333;
+        border-radius: 999px;
+        max-width: 390px;
+    }
+
     &.disabled {
         opacity: 0.5;
         pointer-events: none;
     }
 `;
 
-const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
+const CheckoutSteps = ({ step1, step2, step3, step4,currentStep  }) => {
     return (
         <StyledNav>
             <StyledNavItem>
                 {step1 ? (
                     <LinkContainer to="/login">
-                        <StyledNavLink>
+                        <StyledNavLink className={currentStep >= 1 ? "completed" : "disabled"}>
                             <RiLoginBoxLine /> Sign In
                         </StyledNavLink>
                     </LinkContainer>
@@ -67,7 +75,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             <StyledNavItem>
                 {step2 ? (
                     <LinkContainer to="/bookingInfo">
-                        <StyledNavLink>
+                        <StyledNavLink className={currentStep >= 2 ? "completed" : "disabled"}>
                             <RiInformationLine /> Booking Info
                         </StyledNavLink>
                     </LinkContainer>
@@ -81,7 +89,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             <StyledNavItem>
                 {step3 ? (
                     <LinkContainer to="/payment">
-                        <StyledNavLink>
+                        <StyledNavLink className={currentStep >= 3 ? "completed" : "disabled"}>
                             <FaRegCreditCard /> Payment
                         </StyledNavLink>
                     </LinkContainer>
@@ -95,7 +103,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             <StyledNavItem>
                 {step4 ? (
                     <LinkContainer to="/booking">
-                        <StyledNavLink>
+                        <StyledNavLink className={currentStep >= 4 ? "completed" : "disabled"}>
                             <RiCheckboxCircleLine /> Booking
                         </StyledNavLink>
                     </LinkContainer>
