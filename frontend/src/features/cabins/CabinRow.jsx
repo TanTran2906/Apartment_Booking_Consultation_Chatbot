@@ -75,11 +75,21 @@ function CabinRow({ cabin, refetch }) {
 
     const deleteHandler = async (id) => {
         try {
-            await deleteCabin(id);
-            toast.success("Cabin successfully deleted");
+            const notValid = await deleteCabin(id);
+            // console.log(notValid.error.data, notValid?.data);
+            if (notValid?.data !== null) {
+                toast.error(
+                    "Cannot delete cabin as it is associated with a booking"
+                );
+            } else toast.success("Cabin successfully deleted");
             refetch();
         } catch (err) {
-            toast.error(err?.data?.message || err.error);
+            if (err?.status === 400) {
+                // Xử lý lỗi 400 ở đây
+                toast.error(
+                    "Cannot delete cabin as it is associated with a booking"
+                );
+            } else toast.error(err?.data?.message || err.error);
         }
     };
 

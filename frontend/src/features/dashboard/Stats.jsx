@@ -17,7 +17,7 @@ function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
     // Stat 3)
     const checkins = confirmedStays.length;
 
-    // Stat 4) Tỉ lệ chiếm đóng(căn hộ được sử dụng) giữa số ngày đã stay(check-in or check-out) / tổng số ngày có sẵn (numDays * cabinCount) => trong khoảng thời gian đã cho, chỉ có khoảng X% các căn hộ đã được sử dụng.
+    // Stat 4) Tỉ lệ chiếm đóng(căn hộ được sử dụng) giữa tổng số ngày đã stay(check-in or check-out) / tổng số ngày có sẵn (numDays * cabinCount) => trong khoảng thời gian đã cho, chỉ có khoảng X% các căn hộ đã được sử dụng.
     const occupation =
         confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
         (numDays * cabinCount);

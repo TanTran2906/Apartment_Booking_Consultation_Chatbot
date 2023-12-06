@@ -1,5 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Cabin from '../models/cabinModel.js';
+import Booking from '../models/bookingModel.js';
 import AppError from '../middleware/appError.js';
 
 
@@ -17,14 +18,28 @@ export const getCabins = asyncHandler(async (req, res, next) => {
 export const deleteCabin = asyncHandler(async (req, res, next) => {
     const cabin = await Cabin.findById(req.params.id);
 
-    if (cabin) {
-        await Cabin.deleteOne({ _id: cabin._id });
-        res.status(204).json({
-            message: 'Cabin removed'
-        });
-    } else {
+    if (!cabin) {
         return next(new AppError('No cabin found with that ID', 404))
     }
+
+    // Kiểm tra nếu cabin đang tồn tại trong bất kỳ booking nào
+    const existingBooking = await Booking.findOne({ cabin: cabin._id });
+
+    if (existingBooking) {
+        // return res.status(400).json({
+        //     message: 'Cannot delete cabin as it is associated with a booking'
+        // });
+        return res.status(400).json(
+            existingBooking
+        );
+
+    }
+
+    // Nếu cabin không được liên kết với bất kỳ booking nào, tiến hành xóa
+    await Cabin.deleteOne({ _id: cabin._id });
+    res.status(204).json({
+        message: 'Cabin removed'
+    });
 });
 
 // @desc    Fetch single cabin
