@@ -1,6 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Service from '../models/serviceModel.js';
 import AppError from '../middleware/appError.js';
+import Booking from '../models/bookingModel.js';
 
 
 // @desc    Fetch all services
@@ -17,14 +18,24 @@ export const getServices = asyncHandler(async (req, res, next) => {
 export const deleteService = asyncHandler(async (req, res, next) => {
     const service = await Service.findById(req.params.id);
 
-    if (service) {
-        await Service.deleteOne({ _id: service._id });
-        res.status(204).json({
-            message: 'Service removed'
-        });
-    } else {
-        return next(new AppError('No service found with that ID', 404))
+    if (!service) {
+        return next(new AppError('No service found with that ID', 404));
     }
+
+    // Kiểm tra xem service có được sử dụng trong booking nào không
+    const existingBooking = await Booking.findOne({ services: { $in: [service._id] } });
+
+    if (existingBooking) {
+        return res.status(400).json(
+            existingBooking
+        );
+    }
+
+    // Nếu không có booking nào sử dụng dịch vụ, tiến hành xóa dịch vụ
+    await Service.deleteOne({ _id: service._id });
+    res.status(204).json({
+        message: 'Service removed'
+    });
 });
 
 // @desc    Fetch single service

@@ -75,8 +75,12 @@ function ServiceRow({ service, refetch }) {
 
     const deleteHandler = async (id) => {
         try {
-            await deleteService(id);
-            toast.success("Service successfully deleted");
+            const notValid = await deleteService(id);
+            if (notValid?.data !== null) {
+                toast.error(
+                    "Cannot delete service as it is associated with a booking"
+                );
+            } else toast.success("Service successfully deleted");
             refetch();
         } catch (err) {
             toast.error(err?.data?.message || err.error);
