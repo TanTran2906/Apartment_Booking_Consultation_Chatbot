@@ -3,6 +3,7 @@ import express from 'express'
 import connectDB from './config/db.js'
 import dotenv from 'dotenv'
 import morgan from 'morgan';
+import cors from 'cors'
 // import cookieParser from 'cookie-parser'
 
 import cabinRoutes from './routes/cabinRoutes.js'
@@ -16,8 +17,6 @@ import { errorHandler } from './middleware/errorMiddleware.js'
 import cookieParser from 'cookie-parser'
 
 
-
-
 dotenv.config()
 
 const port = process.env.PORT || 5000
@@ -25,6 +24,9 @@ const port = process.env.PORT || 5000
 connectDB() //Connect to MongoDB
 
 const app = express()
+
+// Bật CORS cho tất cả các route --> để có thể deloy
+app.use(cors());
 
 //Development logging
 if (process.env.NODE_ENV === "development")
