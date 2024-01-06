@@ -116,7 +116,8 @@
 }
 
 .service_item__more::after {
-    content: url(D:\Data_Store\F8_Product\react-hotel\frontend\public\homes\icons\arrow-up-right.svg);
+    /* content: url(D:\Data_Store\F8_Product\react-hotel\frontend\public\homes\icons\arrow-up-right.svg); */
+    content: "";
     margin: 1px 0 0 5px;
 }
 
