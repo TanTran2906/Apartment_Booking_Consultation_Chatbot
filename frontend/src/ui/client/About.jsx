@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "../../styles/clientStyles/About.module.css";
+import CheckIcon from "./CheckIcon";
+
 function About() {
     return (
         <>
@@ -30,15 +32,18 @@ function About() {
                                 </p>
                                 <div className={styles.about__checklist}>
                                     <span className={styles.about__check_item}>
+                                        <CheckIcon />
                                         Classic and Private
                                     </span>
                                     <span className={styles.about__check_item}>
+                                        <CheckIcon />
                                         Environmental Policy
                                     </span>
                                     <span className={styles.about__check_item}>
-                                        Special Offers
+                                        <CheckIcon /> Special Offers
                                     </span>
                                     <span className={styles.about__check_item}>
+                                        <CheckIcon />
                                         Natural Environment
                                     </span>
                                 </div>

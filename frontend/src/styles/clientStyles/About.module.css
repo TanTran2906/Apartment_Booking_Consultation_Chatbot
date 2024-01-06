@@ -113,7 +113,8 @@
     position: absolute;
     top: 2px;
     left: 5px;
-    content: url(D:\Data_Store\F8_Product\react-hotel\frontend\public\homes\icons\check.svg);
+    /* content: url(D:\Data_Store\F8_Product\react-hotel\frontend\public\homes\icons\check.svg); */
+    content: "";
 }
 
 .about__card {
