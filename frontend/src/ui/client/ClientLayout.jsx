@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 // import { Container } from "react-bootstrap";
 import styled from "styled-components";
+import Chatbot from "./Chatbot";
 // import { useDarkMode } from "../../context/DarkModeContext";
 // import { useEffect } from "react";
 
@@ -17,7 +18,7 @@ const StyleApp = styled.div`
 
 function ClientLayout() {
     // const { isDarkMode, toggleDarkMode } = useDarkMode();
-    
+
     // useEffect(function(){
     //     if(isDarkMode) toggleDarkMode();
     // },[isDarkMode,toggleDarkMode])
@@ -27,6 +28,7 @@ function ClientLayout() {
             <Header />
             <Main>
                 <Outlet />
+                <Chatbot />
             </Main>
             <Footer />
         </StyleApp>

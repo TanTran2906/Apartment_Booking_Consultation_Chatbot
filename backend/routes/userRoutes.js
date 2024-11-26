@@ -22,3 +22,4 @@ router.route('/profile').get(protect, getUserProfile).put(protect, updateUserPro
 router.route('/:id').patch(protect, admin, deleteUser).get(protect, admin, getUserById).put(protect, admin, updateUser);
 
 export default router;
+
