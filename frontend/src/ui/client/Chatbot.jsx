@@ -201,18 +201,36 @@ const Chatbot = () => {
         if (!input.trim()) return; // Ngăn gửi tin nhắn trống
 
         const userMessage = { user: "customer", text: input };
+        let userInfo = null;
+
+        try {
+            const storedUserInfo = localStorage.getItem("userInfo");
+            userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : {};
+        } catch (error) {
+            console.error("Error parsing user info:", error);
+            userInfo = {};
+        }
+
         setMessages((prev) => [...prev, userMessage]);
 
         setInput("");
 
         try {
+            console.log(userInfo);
             const response = await fetch("/webhook", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sender: "customer", message: input }),
+                body: JSON.stringify({
+                    sender: "customer",
+                    message: input,
+                    metadata: {
+                        userInfo,
+                    },
+                }),
             });
 
             const data = await response.json();
+            console.log(data);
 
             // Kiểm tra nếu có phản hồi từ bot
             // Kiểm tra nếu có phản hồi từ bot
@@ -237,13 +255,31 @@ const Chatbot = () => {
                             const serviceMatch = button.payload.match(
                                 /'service_id': '([^']+)'/
                             );
+                            const editProfileMatch =
+                                button.payload.match(/'user_id': '([^']+)'/);
+
+                            const bookingStatusMatch = button.payload.match(
+                                /'booking_id': '([^']+)'/
+                            );
 
                             const cabinUrl = cabinMatch ? cabinMatch[1] : null;
                             const serviceUrl = serviceMatch
                                 ? serviceMatch[1]
                                 : null;
+                            const editUrl = editProfileMatch
+                                ? editProfileMatch[1]
+                                : "login";
 
-                            console.log(cabinUrl, serviceUrl);
+                            const bookingStatusUrl = bookingStatusMatch
+                                ? bookingStatusMatch[1]
+                                : "bookingStatusLogin";
+
+                            console.log(
+                                cabinUrl,
+                                serviceUrl,
+                                editUrl,
+                                bookingStatusUrl
+                            );
 
                             // Tạo URL hoặc đối tượng trả về dựa trên loại ID
                             if (cabinUrl) {
@@ -257,6 +293,33 @@ const Chatbot = () => {
                                     user: "bot",
                                     text: button.title, // Tiêu đề nút
                                     url: serviceUrl, // URL trích xuất từ service_id
+                                };
+                            } else if (editUrl !== "login") {
+                                return {
+                                    user: "bot",
+                                    text: button.title, // Tiêu đề nút
+                                    url: "http://localhost:3000/account", // URL trích xuất từ service_id
+                                };
+                            } else if (bookingStatusUrl.includes("@")) {
+                                return {
+                                    user: "bot",
+                                    text: button.title, // Tiêu đề nút
+                                    url: "http://localhost:3000/account", // URL trích xuất từ service_id
+                                };
+                            } else if (
+                                bookingStatusUrl === "bookingStatusLogin" &&
+                                editUrl !== "login"
+                            ) {
+                                return {
+                                    user: "bot",
+                                    text: button.title, // Tiêu đề nút
+                                    url: "http://localhost:3000/login", // URL trích xuất từ service_id
+                                };
+                            } else if (editUrl === "login") {
+                                return {
+                                    user: "bot",
+                                    text: button.title, // Tiêu đề nút
+                                    url: "http://localhost:3000/login", // URL trích xuất từ service_id
                                 };
                             } else {
                                 return {
@@ -356,6 +419,16 @@ const Chatbot = () => {
                                                             )[1]
                                                         }`
                                                     );
+                                                } else if (
+                                                    msg.url.includes("/account")
+                                                ) {
+                                                    // Điều hướng nếu URL chứa services
+                                                    navigate("/account");
+                                                } else if (
+                                                    msg.text.includes("Log In")
+                                                ) {
+                                                    // Điều hướng nếu URL chứa services
+                                                    navigate("/login");
                                                 } else {
                                                     console.warn(
                                                         "Unknown URL format:",

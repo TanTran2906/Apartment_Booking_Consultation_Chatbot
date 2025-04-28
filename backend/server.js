@@ -52,13 +52,17 @@ app.get('/api/config/paypal', (req, res) =>
 // Rasa Webhook
 app.post('/webhook', async (req, res) => {
     try {
-        const { sender, message } = req.body;
+        const { sender, message, metadata } = req.body;  // Lấy thông tin từ request body
 
-        // Gửi yêu cầu POST đến Rasa server
-        const response = await axios.post('http://localhost:5005/webhooks/rest/webhook', {
+        // Tạo đối tượng payload để gửi đến Rasa, có thể thêm metadata nếu cần
+        const rasaPayload = {
             sender,
             message,
-        });
+            metadata,  // Gửi metadata đi để có thể sử dụng trong Rasa
+        };
+
+        // Gửi yêu cầu POST đến Rasa server
+        const response = await axios.post('http://localhost:5005/webhooks/rest/webhook', rasaPayload);
 
         // Trả về dữ liệu phản hồi của Rasa cho frontend
         res.json(response.data);
